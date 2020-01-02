@@ -5,6 +5,5 @@ set -e
 if [ -f tmp/pids/server.pid ]; then
   rm tmp/pids/server.pid
 fi
-# bundle install
-# bundle exec "$@"
-/bin/bash
+bundle install
+bundle exec "$@"

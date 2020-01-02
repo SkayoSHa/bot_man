@@ -54,5 +54,4 @@ RUN mkdir ~/.gnupg
 RUN echo "allow-loopback-pinentry" | tee ~/.gnupg/gpg-agent.conf
 
 ENTRYPOINT ["/app/docker-entry.sh"]
-# CMD ["rails", "server", "-b", "0.0.0.0"]
-CMD ["/bin/bash"]
+CMD ["rails", "server", "-b", "0.0.0.0"]
