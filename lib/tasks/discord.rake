@@ -10,8 +10,10 @@ namespace :discord do
     require "bot/ping_container"
 
     bot = Discordrb::Commands::CommandBot.new(token: ENV["BOTMAN_BOT_TOKEN"], prefix: "!")
-    # bot.include! CodesContainer
+
+    bot.include! InfoContainer
     bot.include! PingContainer
+    bot.include! PrivateContainer
 
     if ENV["IS_DEV"]
       # Here we output the invite URL to the console so the bot account can be invited to the channel. This only has to be
