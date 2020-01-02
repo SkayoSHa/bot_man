@@ -1,24 +1,18 @@
-# README
+# bot_man
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Setup:
 
-Things you may want to cover:
+Soon™
 
-* Ruby version
+## Running:
 
-* System dependencies
+Soon™
 
-* Configuration
+## Adding the bot:
 
-* Database creation
+To add the bot to your server, visit this link:
+[https://discordapp.com/oauth2/authorize?client_id=662139319305371669&scope=bot&permissions=8](https://discordapp.com/oauth2/authorize?client_id=662139319305371669&scope=bot&permissions=8)
 
-* Database initialization
+## Other:
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+https://www.reddit.com/r/discordapp/comments/a39fap/custom_role_separators/
