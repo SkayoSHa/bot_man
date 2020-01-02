@@ -58,6 +58,7 @@ GEM
       zeitwerk (~> 2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    bcrypt (3.1.13)
     bindex (0.8.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
@@ -75,6 +76,12 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     crass (1.0.5)
+    devise (4.7.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
       ffi (>= 1.9.24)
@@ -124,6 +131,7 @@ GEM
       mini_portile2 (~> 2.4.0)
     opus-ruby (1.0.1)
       ffi
+    orm_adapter (0.5.0)
     pg (1.2.0)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -172,6 +180,9 @@ GEM
     rbnacl (3.4.0)
       ffi
     regexp_parser (1.6.0)
+    responders (3.0.0)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -200,6 +211,8 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
+    warden (1.2.8)
+      rack (>= 2.0.6)
     web-console (4.0.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -231,6 +244,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  devise
   discordrb
   jbuilder (~> 2.7)
   listen (>= 3.0.5, < 3.2)
