@@ -1,0 +1,46 @@
+version: "3"
+
+volumes:
+  postgres_data12:
+
+services:
+  ###########################
+  # SHARED POSTGRES CLUSTER #
+  ###########################
+  postgres:
+    image: postgres:12
+    volumes:
+      - postgres_data12:/var/lib/postgresql/data
+    logging:
+      driver: "none"
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    logging:
+      driver: "none"
+
+  ##############
+  # BOT SERVER #
+  ##############
+  web-bot:
+    build:
+      context: .
+    tty: true
+    stdin_open: true
+    env_file:
+      - ./vars.env
+    environment:
+      - SKIP_YARN=true
+      - REDIS_URL=redis://redis
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "3000:3000"
+    links:
+      - redis
+      - postgres
+    volumes:
+      - ./:/app:delegated
