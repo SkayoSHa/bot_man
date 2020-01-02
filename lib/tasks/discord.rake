@@ -40,11 +40,11 @@ namespace :discord do
       prefix: "!"
     )
 
-    require "bot/admin_container"
-    require "bot/info_container"
-    require "bot/ping_container"
-    require "bot/private_container"
-    require "bot/presence_container"
+    require "bot/commands/admin_container"
+    require "bot/commands/info_container"
+    require "bot/commands/ping_container"
+    require "bot/commands/private_container"
+    require "bot/events/presence_container"
 
     bot.include! AdminContainer
     bot.include! InfoContainer
