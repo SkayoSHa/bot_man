@@ -11,6 +11,7 @@ namespace :discord do
 
     bot = Discordrb::Commands::CommandBot.new(token: ENV["BOTMAN_BOT_TOKEN"], prefix: "!")
 
+    bot.include! AdminContainer
     bot.include! InfoContainer
     bot.include! PingContainer
     bot.include! PrivateContainer
