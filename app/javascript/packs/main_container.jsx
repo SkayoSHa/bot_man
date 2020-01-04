@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-const MainContainer = props => <div>Hello12 {props.name}!</div>;
+const MainContainer = props => <div>Hello {props.name}!</div>;
 
 MainContainer.defaultProps = {
   name: "David"
