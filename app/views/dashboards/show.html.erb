@@ -1,2 +1,13 @@
-<div id="main-container"></div>
 <%= javascript_pack_tag 'main_container' %>
+
+<%= content_tag :div,
+                nil,
+                id: 'main-container',
+                class: 'main-container',
+                data: { environment: Rails.env,
+                        isSignedIn: user_signed_in?,
+                        username: (user_signed_in? ? current_user.email : ""),
+                        notifications: flash.map {|alert| {
+                          type: alert[0],
+                          message: alert[1]
+                        }}}.to_json %>

@@ -1,22 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
+import styled from "styled-components";
+import { BrowserRouter as Router } from "react-router-dom";
+import Navigation from "../core/navigation";
+import Pages from "../core/pages";
 
-const MainContainer = props => <div>Hello {props.name}!</div>;
+const Container = styled.div`
+  padding: 0 20px;
+`;
 
-MainContainer.defaultProps = {
-  name: "David"
-};
-
-MainContainer.propTypes = {
-  name: PropTypes.string
+const MainContainer = props => {
+  return (
+    <Container>
+      <Navigation {...props} />
+      <Pages />
+    </Container>
+  );
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  const node = document.getElementById("main-container");
+  const data = JSON.parse(node.getAttribute("data"));
+
   ReactDOM.render(
-    <MainContainer name="React" />,
-    document
-      .getElementById("main-container")
-      .appendChild(document.createElement("div"))
+    <Router history={history}>
+      <MainContainer name="React" {...data} />
+    </Router>,
+    node
   );
 });
+
+export default MainContainer;
