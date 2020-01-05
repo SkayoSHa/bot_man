@@ -32,6 +32,14 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     marginLeft: theme.spacing(5),
     marginRight: theme.spacing(5)
+  },
+  login_logout: {
+    "&:focus, &:hover, &:visited, &:link, &:active": {
+      textDecoration: "none",
+      backgroundColor: "inherit"
+    },
+    color: "white",
+    marginRight: theme.spacing(1)
   }
 }));
 
@@ -90,8 +98,8 @@ const Navigation = props => {
 
           {isSignedIn && (
             <Button
-              color="inherit"
               component={URL_Link}
+              className={classes.login_logout}
               data-confirm="Sure you want to log out?"
               rel="nofollow"
               data-method="delete"
@@ -101,7 +109,11 @@ const Navigation = props => {
             </Button>
           )}
           {!isSignedIn && (
-            <Button color="inherit" component={URL_Link} href="/users/sign_in">
+            <Button
+              component={URL_Link}
+              className={classes.login_logout}
+              href="/users/sign_in"
+            >
               Login
             </Button>
           )}
