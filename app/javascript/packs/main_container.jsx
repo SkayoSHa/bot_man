@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(node.getAttribute("data"));
 
   ReactDOM.render(
-    <Router history={history}>
+    <Router>
       <MainContainer name="React" {...data} />
     </Router>,
     node
