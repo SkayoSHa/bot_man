@@ -1,21 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { default as URL_Link } from "@material-ui/core/Link";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import { MemoryRouter as Router } from "react-router";
-import { Link as RouterLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
+import { default as URL_Link } from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/core/Menu";
-import { withRouter } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import { Link, withRouter } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,7 +42,7 @@ const Navigation = props => {
   const classes = useStyles();
   const [value, setValue] = React.useState(path);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
 
@@ -64,9 +58,11 @@ const Navigation = props => {
           >
             <MenuIcon />
           </IconButton>
+
           <Typography variant="h6" className={classes.title}>
             BotMan
           </Typography>
+
           <Tabs
             value={value}
             onChange={handleChange}
