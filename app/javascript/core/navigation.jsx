@@ -73,14 +73,14 @@ const Navigation = props => {
           >
             <Tab label="Home" to="/" value="/" component={Link} />
             <Tab label="Home1" to="/home1" value="/home1" component={Link} />
-            <Tab label="Home2" to="/home2" value="/home2" component={Link} />
             <Tab
-              label="Home3"
-              to="/home3"
-              value="/home3"
+              label="Home2"
+              to="/home2"
+              value="/home2"
               component={Link}
               disabled
             />
+            <Tab label="Home3" to="/home3" value="/home3" component={Link} />
           </TopTabs>
           <EnvironmentLabel variant="subtitle2">{environment}</EnvironmentLabel>
           <UsernameLabel variant="subtitle2">
