@@ -8,44 +8,51 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import styled from "styled-components";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(5)
-  },
-  environment: {
-    marginRight: theme.spacing(2)
-  },
-  username: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
-  },
-  tabs: {
-    position: "relative",
-    width: "100%",
-    marginLeft: theme.spacing(5),
-    marginRight: theme.spacing(5)
-  },
-  login_logout: {
-    "&:focus, &:hover, &:visited, &:link, &:active": {
-      textDecoration: "none",
-      backgroundColor: "inherit"
-    },
-    color: "white",
-    marginRight: theme.spacing(1)
+const Root = styled.div`
+  flex-grow: 1;
+`;
+
+const EnvironmentLabel = styled(Typography)`
+  margin-right: 16px !important;
+`;
+
+const UsernameLabel = styled(Typography)`
+  margin-right: 16px !important;
+`;
+
+const Title = styled(Typography)`
+  flex-grow: 1;
+`;
+
+const TopTabs = styled(Tabs)`
+  position: relative;
+  width: 100%;
+  margin-left: 16px;
+  margin-right: 16px;
+`;
+
+const LogoutButton = styled(Button)`
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none !important;
+    background-color: inherit;
+    color: white;
   }
-}));
+  color: white;
+  margin-right: 16px;
+`;
+
+const LoginButton = styled(LogoutButton)``;
 
 const Navigation = props => {
   const { environment, isSignedIn, username } = props;
   const path = props.location.pathname;
 
-  const classes = useStyles();
   const [value, setValue] = React.useState(path);
 
   const handleChange = (_, newValue) => {
@@ -53,17 +60,14 @@ const Navigation = props => {
   };
 
   return (
-    <div className={classes.root}>
+    <Root>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            BotMan
-          </Typography>
+          <Title variant="h6">BotMan</Title>
 
-          <Tabs
+          <TopTabs
             value={value}
             onChange={handleChange}
-            className={classes.tabs}
             variant="scrollable"
             scrollButtons="auto"
           >
@@ -77,38 +81,31 @@ const Navigation = props => {
               component={Link}
               disabled
             />
-          </Tabs>
-          <Typography variant="subtitle2" className={classes.environment}>
-            {environment}
-          </Typography>
-          <Typography variant="subtitle2" className={classes.username}>
+          </TopTabs>
+          <EnvironmentLabel variant="subtitle2">{environment}</EnvironmentLabel>
+          <UsernameLabel variant="subtitle2">
             {isSignedIn && `${username}`}
-          </Typography>
+          </UsernameLabel>
 
           {isSignedIn && (
-            <Button
+            <LogoutButton
               component={URL_Link}
-              className={classes.login_logout}
               data-confirm="Sure you want to log out?"
               rel="nofollow"
               data-method="delete"
               href="/users/sign_out"
             >
               Logout
-            </Button>
+            </LogoutButton>
           )}
           {!isSignedIn && (
-            <Button
-              component={URL_Link}
-              className={classes.login_logout}
-              href="/users/sign_in"
-            >
+            <LoginButton component={URL_Link} href="/users/sign_in">
               Login
-            </Button>
+            </LoginButton>
           )}
         </Toolbar>
       </AppBar>
-    </div>
+    </Root>
   );
 };
 
