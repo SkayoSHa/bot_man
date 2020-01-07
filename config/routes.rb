@@ -4,5 +4,10 @@ Rails.application.routes.draw do
                        path_names: { sign_in: :login }
   end
 
-  resources :users, only: [:index, :show]
+  resources :users, only: [:index, :show] do
+    collection do
+      get "/profile", to: "users#profile"
+    end
+  end
+
 end

@@ -4,6 +4,13 @@ class UsersController < ApplicationController
 
   # GET /users
   # GET /users.json
+  def profile
+    @user = current_user
+    render :show
+  end
+
+  # GET /users
+  # GET /users.json
   def index
     @users = User.all
   end
