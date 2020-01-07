@@ -4,5 +4,5 @@ Rails.application.routes.draw do
                        path_names: { sign_in: :login }
   end
 
-  resources :users, only: [:index, :show, :update]
+  resources :users, only: [:index, :show]
 end
