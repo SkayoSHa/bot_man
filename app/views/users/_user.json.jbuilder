@@ -1,3 +1,7 @@
-json.extract! user, :id, :created_at, :updated_at
-json.url users_url(user, format: :json)
-json.token user.generate_jwt
+json.id user.id
+json.email user.email
+json.isSignedIn true
+
+if @includeToken
+  json.token user.generate_jwt
+end
