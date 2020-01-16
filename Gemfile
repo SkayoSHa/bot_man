@@ -19,6 +19,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'devise'
 gem 'jwt'
 gem "rack-cors"
+gem "omniauth"
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -53,3 +54,4 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'discordrb'
+gem 'omniauth-discord'
