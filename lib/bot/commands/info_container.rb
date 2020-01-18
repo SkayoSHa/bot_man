@@ -3,6 +3,13 @@
 module InfoContainer
   extend Discordrb::Commands::CommandContainer
 
+  command :test, description: "Responds with various things for testing...", help_available: false do |event|
+    break unless event.user.id == 147930850091073536
+
+    binding.pry
+    "TEST"
+  end
+
   command :user, description: "Responds with your name" do |event|
     event.user.name
   end
