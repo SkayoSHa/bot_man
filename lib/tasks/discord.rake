@@ -11,7 +11,7 @@ namespace :discord do
       prefix: "!"
     )
 
-    require Rails.root.join("lib", "bot", "commands", "base_container.rb")
+    require Rails.root.join("lib", "bot", "commands", "base_command_container.rb")
 
     Dir["#{Rails.root.join("lib", "bot")}/**/*.rb"].each do |file_path|
       require file_path

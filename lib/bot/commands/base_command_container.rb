@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseContainer
+class BaseCommandContainer
   extend Discordrb::Commands::CommandContainer
 
   # Overwrite command, so that we can record the

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InfoContainer < BaseContainer
+class InfoContainer < BaseCommandContainer
   command :test, description: "Responds with various things for testing...", help_available: false do |event|
     break unless event.user.id == 147930850091073536
 
