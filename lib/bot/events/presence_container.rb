@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-module PresenceContainer
-  extend Discordrb::EventContainer
-
+class PresenceContainer < BaseEventContainer
   playing do |event|
     pp event.details
     pp event.game

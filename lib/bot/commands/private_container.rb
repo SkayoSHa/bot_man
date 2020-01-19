@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-module PrivateContainer
-  extend Discordrb::Commands::CommandContainer
-
+class PrivateContainer < BaseCommandContainer
   command :pm, description: "Responds in a private message" do |event|
     event.user.pm('Go away...')
   end
