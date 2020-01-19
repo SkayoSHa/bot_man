@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module InfoContainer
-  extend Discordrb::Commands::CommandContainer
+class InfoContainer < BaseContainer
 
   command :test, description: "Responds with various things for testing...", help_available: false do |event|
     break unless event.user.id == 147930850091073536

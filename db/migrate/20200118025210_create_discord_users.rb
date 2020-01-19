@@ -3,7 +3,7 @@
 class CreateDiscordUsers < ActiveRecord::Migration[6.0]
   def change
     create_table :discord_users, id: false do |t|
-      t.integer :uid, primary_key: true
+      t.bigint :uid, primary_key: true
       t.string :name
       t.string :discriminator
       t.string :avatar_url
