@@ -6,6 +6,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if user
       user.update_discord_data(auth_hash)
+      UserService.update_db_from_user_oauth(auth_hash)
 
       redirect_to "#{FRONTEND_URL}?token=#{user.generate_jwt}"
     else
