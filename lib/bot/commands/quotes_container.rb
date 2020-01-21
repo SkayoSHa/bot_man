@@ -47,20 +47,7 @@ class QuotesContainer < BaseCommandContainer
 
     return "No quote found." unless quote
 
-    quoter = event.server.member(quote.quoter_uid)
-    quoter_name = quoter.nick || "#{quoter.username}##{quoter.discriminator}"
-
-    quotee = event.server.member(quote.quotee_uid)
-    quotee_name = quotee.nick || "#{quotee.username}##{quotee.discriminator}"
-
-    embed = Discordrb::Webhooks::Embed.new(
-      color: "#3FB426",
-      description: quote.quote,
-      timestamp: quote.created_at
-    )
-    embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: quotee_name, icon_url: quotee.avatar_url)
-    embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Quoted by: #{quoter_name}", icon_url: quoter.avatar_url)
-
+    embed = embed_for(event, quote)
     event.bot.send_message(event.channel, "", false, embed)
     nil
   end
@@ -81,6 +68,22 @@ class QuotesContainer < BaseCommandContainer
     # TODO: add confirmation?
     "Quote removed."
   end
+
+  command :allquotes, min_args: 0, max_args: 1, description: "Removes a quote", usage: 'allquotes (@<user>)' do |event, target_user_name|
+    target_user_id = target_user_name&.delete("^0-9")
+    target_user = event.server.member(target_user_id)
+
+    quotes = Quote.where(server_uid: event.server.id)
+    quotes = quotes.where(quotee_uid: target_user.id) if target_user
+    quotes = quotes.order(:created_at)
+
+    quotes.each do |quote|
+      embed = embed_for(event, quote)
+      event.bot.send_message(event.user.pm, "", false, embed)
+    end
+
+    "Please check your direct messages."
+  end
 end
 
 def random_quote(user: nil)
@@ -91,4 +94,21 @@ def random_quote(user: nil)
   end
 
   quote.order("RANDOM()").first
+end
+
+def embed_for(event, quote)
+  quoter = event.server.member(quote.quoter_uid)
+  quoter_name = quoter.nick || "#{quoter.username}##{quoter.discriminator}"
+
+  quotee = event.server.member(quote.quotee_uid)
+  quotee_name = quotee.nick || "#{quotee.username}##{quotee.discriminator}"
+
+  embed = Discordrb::Webhooks::Embed.new(
+    color: "#3FB426",
+    description: quote.quote,
+    timestamp: quote.created_at
+  )
+  embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: quotee_name, icon_url: quotee.avatar_url)
+  embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Quote ##{quote.id} by: #{quoter_name}", icon_url: quoter.avatar_url)
+  embed
 end
