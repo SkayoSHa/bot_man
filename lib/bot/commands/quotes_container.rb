@@ -28,7 +28,7 @@ class QuotesContainer < BaseCommandContainer
 
   command :quote, aliases: [:quotes], min_args: 0, max_args: 1, description: "Replays a quote", usage: 'quote (@<user>|<id>)' do |event, target|
     # Return a random one, if target is nil
-    quote = random_quote if target.nil?
+    quote = random_quote(server_id: event.server.id) if target.nil?
 
     unless quote
       key = target.delete("^0-9")
@@ -37,7 +37,7 @@ class QuotesContainer < BaseCommandContainer
 
       # There was a user supplied
       if target_user
-        quote =  random_quote(user: target_user)
+        quote =  random_quote(server_id: event.server.id, user: target_user)
       else
 
       end
@@ -86,8 +86,8 @@ class QuotesContainer < BaseCommandContainer
   end
 end
 
-def random_quote(user: nil)
-  quote = Quote
+def random_quote(server_id:, user: nil)
+  quote = Quote.where(server_uid: server_id)
 
   if user
     quote = quote.where(quotee_uid: user.id)
