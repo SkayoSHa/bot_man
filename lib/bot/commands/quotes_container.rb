@@ -42,7 +42,7 @@ class QuotesContainer < BaseCommandContainer
 
       end
 
-      quote = Quote.find_by_id(key)
+      quote = Quote.find_by(server_uid: event.server.id, id: key)
     end
 
     return "No quote found." unless quote
@@ -63,6 +63,23 @@ class QuotesContainer < BaseCommandContainer
 
     event.bot.send_message(event.channel, "", false, embed)
     nil
+  end
+
+  command :removequote, min_args: 1, max_args: 1, description: "Removes a quote", usage: 'removequote [the quote ID to remove]' do |event, quote_id|
+    return "Please add the quote to remove" unless quote_id
+
+    quote = Quote.find_by(server_uid: event.server.id, id: quote_id)
+
+    return "Quote not found." unless quote
+
+    if quote.quoter_uid == event.user.id || quote.quotee_uid == event.user.id
+      quote.delete
+    else
+      return "Only the quote author or reporter can delete this quote."
+    end
+
+    # TODO: add confirmation?
+    "Quote removed."
   end
 end
 
