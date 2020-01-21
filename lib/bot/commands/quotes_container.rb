@@ -47,8 +47,19 @@ class QuotesContainer < BaseCommandContainer
 
     return "No quote found." unless quote
 
-    embed = Discordrb::Webhooks::Embed.new(title: "Quote:")
-    embed.add_field(name: "@<#{quote.quotee_uid}>", value: quote.quote)
+    quoter = event.server.member(quote.quoter_uid)
+    quoter_name = quoter.nick || "#{quoter.username}##{quoter.discriminator}"
+
+    quotee = event.server.member(quote.quotee_uid)
+    quotee_name = quotee.nick || "#{quotee.username}##{quotee.discriminator}"
+
+    embed = Discordrb::Webhooks::Embed.new(
+      color: "#3FB426",
+      description: quote.quote,
+      timestamp: quote.created_at
+    )
+    embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: quotee_name, icon_url: quotee.avatar_url)
+    embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Quoted by: #{quoter_name}", icon_url: quoter.avatar_url)
 
     event.bot.send_message(event.channel, "", false, embed)
     nil
