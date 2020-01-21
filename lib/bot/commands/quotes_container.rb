@@ -28,19 +28,30 @@ class QuotesContainer < BaseCommandContainer
 
   command :quote, aliases: [:quotes], min_args: 0, max_args: 1, description: "Replays a quote", usage: 'quote (@<user>|<id>)' do |event, target|
     # Return a random one, if target is nil
-    return format_quote(random_quote) if target.nil?
+    quote = random_quote if target.nil?
 
-    key = target.delete("^0-9")
+    unless quote
+      key = target.delete("^0-9")
 
-    target_user = event.server.member(key)
+      target_user = event.server.member(key)
 
-    # There was a user supplied
-    if target_user
-      return format_quote(random_quote(user: target_user))
+      # There was a user supplied
+      if target_user
+        quote =  random_quote(user: target_user)
+      else
+
+      end
+
+      quote = Quote.find_by_id(key)
     end
 
-    quote = Quote.find_by_id(key)
-    return format_quote(quote)
+    return "No quote found." unless quote
+
+    embed = Discordrb::Webhooks::Embed.new(title: "Quote:")
+    embed.add_field(name: "@<#{quote.quotee_uid}>", value: quote.quote)
+
+    event.bot.send_message(event.channel, "", false, embed)
+    nil
   end
 end
 
@@ -52,9 +63,4 @@ def random_quote(user: nil)
   end
 
   quote.order("RANDOM()").first
-end
-
-def format_quote(quote)
-  return "No quote found." unless quote
-  quote.quote
 end
