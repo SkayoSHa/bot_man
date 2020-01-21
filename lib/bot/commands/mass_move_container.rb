@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MassMoveContainer < BaseCommandContainer
-  command :massmove, description: "Moves all users in a voice channel to another voice channel", usage: 'massmove [source_channel] [destination_channel]' do |event, source_channel_name, dest_channel_name|
+  command :massmove, min_args: 2, max_args: 2, description: "Moves all users in a voice channel to another voice channel", usage: 'massmove [source_channel] [destination_channel]' do |event, source_channel_name, dest_channel_name|
     voice_channels = event.server.voice_channels
     server = event.server
 
