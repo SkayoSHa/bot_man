@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class QuotesContainer < BaseCommandContainer
+  extend Discordrb::EventContainer
+
   command :addquote, min_args: 2, description: "Records a new quote", usage: 'addquote @<user> [the quote to add]' do |event, target_user_string, *quote|
     return "Please tag someone to quote" unless target_user_string
     return "Please add a quote" unless quote
@@ -50,6 +52,37 @@ class QuotesContainer < BaseCommandContainer
     embed = embed_for(event, quote)
     event.bot.send_message(event.channel, "", false, embed)
     nil
+  end
+
+  reaction_add emoji: "quote" do |event|
+    quote = event.message.text
+
+    unless quote.empty?
+      target_user = event.message.user
+
+      # Make sure that the target user is in the DB
+      UserService.update_db_from_user(event.user)
+      UserService.update_db_from_user(target_user)
+
+      is_new = Quote.where(
+        server_uid: event.server.id,
+        message_id: event.message.id
+      ).count.zero?
+
+      if is_new
+        # Actually add the quote
+        new_quote = Quote.create!(
+          server_uid: event.server.id,
+          quoter_uid: event.user.id,
+          quotee_uid: target_user.id,
+          quote: quote,
+          message_id: event.message.id
+        )
+
+        # TODO: link the id returned to the frontend?
+        event.bot.send_message(event.channel, "Quote ##{new_quote.id} successfully added")
+      end
+    end
   end
 
   command :removequote, min_args: 1, max_args: 1, description: "Removes a quote", usage: 'removequote [the quote ID to remove]' do |event, quote_id|
