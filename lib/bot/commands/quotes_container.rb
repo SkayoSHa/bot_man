@@ -141,6 +141,7 @@ def embed_for(event, quote)
     description: quote.quote,
     timestamp: quote.created_at
   )
+
   embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: quotee_name, icon_url: quotee.avatar_url)
   embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Quote ##{quote.id} by: #{quoter_name}", icon_url: quoter.avatar_url)
   embed
