@@ -1,5 +1,6 @@
 language: ruby
-sudo: required
+dist: xenial
+os: linux
 rvm:
   - 2.7
 branches:
