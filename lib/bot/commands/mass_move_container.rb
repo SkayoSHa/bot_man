@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MassMoveContainer < BaseCommandContainer
-  command :massmove, min_args: 2, max_args: 2, description: "Moves all users in a voice channel to another voice channel", usage: 'massmove [source_channel] [destination_channel]' do |event, source_channel_name, dest_channel_name|
+  command :massmove, min_args: 2, max_args: 2, description: "Moves all users in a voice channel to another voice channel", usage: "massmove [source_channel] [destination_channel]" do |event, source_channel_name, dest_channel_name|
     voice_channels = event.server.voice_channels
     server = event.server
 
@@ -15,34 +15,40 @@ class MassMoveContainer < BaseCommandContainer
       server.move(user, dest_channel)
     end
 
-    "Moving #{user_count} #{"user".pluralize(user_count)} to #{dest_channel.name}"
+    "Moving #{user_count} #{'user'.pluralize(user_count)} to #{dest_channel.name}"
   end
-end
 
-def closest_channel(text, channels)
-  closest = nil
-  dist = 999_999
+  def self.closest_channel(text, channels)
+    source = text.downcase.tr("^0-9a-z", "")
 
-  channels.each do |channel|
-    l = lev(text, channel.name)
+    closest = nil
+    dist = 999_999
 
-    if l < dist
-      dist = l
-      closest = channel
+    channels.each do |channel|
+      target = channel.name.downcase.tr("^0-9a-z", "")
+      l = lev(source, target)
+
+      if l < dist
+        dist = l
+        closest = channel
+      end
     end
+
+    closest
   end
 
-  closest
-end
+  def self.lev(string1, string2, memo = {})
+    return memo[[string1, string2]] if memo[[string1, string2]]
+    return string2.size if string1.empty?
+    return string1.size if string2.empty?
 
-def lev(string1, string2, memo={})
-  return memo[[string1, string2]] if memo[[string1, string2]]
-  return string2.size if string1.empty?
-  return string1.size if string2.empty?
-  min = [ lev(string1.chop, string2, memo) + 1,
-          lev(string1, string2.chop, memo) + 1,
-          lev(string1.chop, string2.chop, memo) + (string1[-1] == string2[-1] ? 0 : 1)
-      ].min
-  memo[[string1, string2]] = min
-  min
+    min = [
+      lev(string1.chop, string2, memo) + 1,
+      lev(string1, string2.chop, memo) + 1,
+      lev(string1.chop, string2.chop, memo) + (string1[-1] == string2[-1] ? 0 : 1)
+    ].min
+
+    memo[[string1, string2]] = min
+    min
+  end
 end
