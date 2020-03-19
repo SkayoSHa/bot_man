@@ -3,9 +3,23 @@ dist: xenial
 os: linux
 rvm:
   - 2.7
+
+services:
+  postgresql: 12
+  code_climate:
+    repo_token: 44e736e076f047213db8f3bee16e82be964c0c3ccebc06bb46526ee823610c7f
+
 branches:
   only:
     - master
+
 before_install:
   - sudo apt-get update -q
   - sudo apt-get install libsodium-dev -y
+
+script:
+  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
+
+after_success:
+  - bundle exec codeclimate-test-reporter
