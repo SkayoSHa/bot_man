@@ -5,9 +5,13 @@ rvm:
   - 2.7
 
 services:
-  postgresql: 12
   code_climate:
     repo_token: 44e736e076f047213db8f3bee16e82be964c0c3ccebc06bb46526ee823610c7f
+  postgresql: 12
+  apt:
+    packages:
+      - postgresql-12
+      - postgresql-client-12
 
 branches:
   only:
