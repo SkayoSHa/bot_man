@@ -7,11 +7,6 @@ rvm:
 services:
   - postgresql
 
-# services:
-#   code_climate:
-#     repo_token: 44e736e076f047213db8f3bee16e82be964c0c3ccebc06bb46526ee823610c7f
-#   postgresql
-
 branches:
   only:
     - master
@@ -26,6 +21,3 @@ before_script:
 script:
   - bundle exec rake db:migrate RAILS_ENV=test
   - bundle exec rspec
-
-after_success:
-  - bundle exec codeclimate-test-reporter
