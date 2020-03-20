@@ -33,9 +33,9 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: %i[discord]
 
   validates :email,
-    presence: true,
-    uniqueness: true,
-    format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+            presence: true,
+            uniqueness: true,
+            format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
 
   def self.from_discord_omniauth(auth)
     # Check first for a uid match
@@ -57,10 +57,9 @@ class User < ApplicationRecord
 
   def generate_jwt
     JWT.encode({
-        id: id,
-        exp: 7.days.from_now.to_i
-      },
-      Rails.application.secrets.secret_key_base
-    )
+                 id: id,
+                 exp: 7.days.from_now.to_i
+               },
+               Rails.application.secrets.secret_key_base)
   end
 end
