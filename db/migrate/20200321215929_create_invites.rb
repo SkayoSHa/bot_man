@@ -6,6 +6,7 @@ class CreateInvites < ActiveRecord::Migration[6.0]
       t.bigint :server_uid, null: false
       t.bigint :inviter_uid, null: false
       t.string :code, null: false
+      t.string :channel, null: false
       t.integer :uses, null: false
       t.integer :max_uses
       t.boolean :active, null: false

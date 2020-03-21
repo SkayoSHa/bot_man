@@ -6,6 +6,7 @@
 #
 #  id          :bigint           not null, primary key
 #  active      :boolean          not null
+#  channel     :string           not null
 #  code        :string           not null
 #  expires     :datetime
 #  inviter_uid :bigint           not null
