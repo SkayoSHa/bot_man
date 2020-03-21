@@ -12,6 +12,7 @@
 #  inviter_uid :bigint           not null
 #  max_uses    :integer
 #  server_uid  :bigint           not null
+#  temporary   :boolean          not null
 #  uses        :integer          not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

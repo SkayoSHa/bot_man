@@ -10,6 +10,7 @@ class CreateInvites < ActiveRecord::Migration[6.0]
       t.integer :uses, null: false
       t.integer :max_uses
       t.boolean :active, null: false
+      t.boolean :temporary, null: false
       t.datetime :expires
 
       t.timestamps

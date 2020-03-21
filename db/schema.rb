@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_03_21_215929) do
     t.integer "uses", null: false
     t.integer "max_uses"
     t.boolean "active", null: false
+    t.boolean "temporary", null: false
     t.datetime "expires"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
