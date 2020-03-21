@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_24_040937) do
+ActiveRecord::Schema.define(version: 2020_03_21_215929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,18 @@ ActiveRecord::Schema.define(version: 2020_01_24_040937) do
     t.string "discriminator"
     t.string "avatar_url"
     t.boolean "bot_account"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "invites", force: :cascade do |t|
+    t.bigint "server_uid", null: false
+    t.bigint "inviter_uid", null: false
+    t.string "code", null: false
+    t.integer "uses", null: false
+    t.integer "max_uses"
+    t.boolean "active", null: false
+    t.datetime "expires"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
