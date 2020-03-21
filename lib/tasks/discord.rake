@@ -15,9 +15,9 @@ namespace :discord do
     require Rails.root.join("lib", "bot", "events", "base_event_container.rb")
 
     Dir[
-      "#{Rails.root.join("lib", "bot", "commands")}/**/*.rb",
-      "#{Rails.root.join("lib", "bot", "events")}/**/*.rb"
-    ].each do |file_path|
+      "#{Rails.root.join('lib', 'bot', 'commands')}/**/*.rb",
+      "#{Rails.root.join('lib', 'bot', 'events')}/**/*.rb"
+    ].sort.each do |file_path|
       require file_path
 
       file_name = File.basename(file_path, ".rb")
@@ -28,12 +28,11 @@ namespace :discord do
       # Here we output the invite URL to the console so the bot account can be invited to the channel.
       # This only has to be done once
       puts "This bot's invite URL is #{bot.invite_url}."
-      puts 'Click on it to invite it to your server.'
+      puts "Click on it to invite it to your server."
     end
 
     bot.run
   end
-
 
   desc "Starts the Discord bot"
   task bot: :environment do
