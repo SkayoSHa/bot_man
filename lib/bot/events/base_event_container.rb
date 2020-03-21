@@ -99,6 +99,10 @@ class BaseEventContainer < ContainerWrapper
     super(attributes, &proc_wrapper(&block))
   end
 
+  def self.raw(attributes = {}, &block)
+    super(attributes, &block)
+  end
+
   # TODO: Add event shimming to these as well
   # Server-related events:
   # server_create
