@@ -13,6 +13,7 @@ class InviteContainer < BaseEventContainer
 
   def self.handle_invite_create(event)
     pp event.type
+    pp event.data
     # Save the new invite that was just created
 
     # :INVITE_CREATE
@@ -29,10 +30,24 @@ class InviteContainer < BaseEventContainer
     #  "created_at"=>"2020-03-21T22:50:32.853014+00:00",
     #  "code"=>"HbHFwR",
     #  "channel_id"=>"464322466198716437"}
+
+    # Invite.create!(
+    #   server_uid: ,
+    #   inviter_uid: ,
+    #   code: ,
+    #   channel: ,
+    #   uses: ,
+    #   max_uses: ,
+    #   active: ,
+    #   temporary: ,
+    #   expires: ,
+    # )
   end
 
   def self.handle_invite_delete(event)
     pp event.type
+    pp event.data
+
     # Make sure we already have a log of that invite
 
     # Update it with the new information
