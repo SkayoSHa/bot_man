@@ -17,6 +17,7 @@ RSpec.describe MassMoveContainer do
       double(name: "Rocket League"),
       double(name: "Overwatch"),
       double(name: "Rainbow Six Siege"),
+      double(name: "Civilization / Age"),
       double(name: "Rust"),
       double(name: "Bot Development"),
       double(name: "~COUNT VON COUNT"),
@@ -35,7 +36,10 @@ RSpec.describe MassMoveContainer do
 
     expect_closest_channel("create", "➥ Create Room!")
     expect_closest_channel("development", "Bot Development")
-    expect_closest_channel("afk", "-- AFK --")
+
+    # Direct substring tests
+    expect_closest_channel("Age", "Civilization / Age")
+    expect_closest_channel("rocket", "Rocket League")
   end
 
   def expect_closest_channel(source, expectation)
