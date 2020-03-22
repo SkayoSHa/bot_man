@@ -5,6 +5,7 @@ class CreateInvites < ActiveRecord::Migration[6.0]
     create_table :invites do |t|
       t.bigint :server_uid, null: false
       t.bigint :inviter_uid, null: false
+      t.bigint :deleter_uid
       t.string :code, null: false
       t.string :channel_uid, null: false
       t.integer :uses, null: false

@@ -8,6 +8,7 @@
 #  active      :boolean          not null
 #  channel_uid :string           not null
 #  code        :string           not null
+#  deleter_uid :bigint
 #  expires     :datetime
 #  inviter_uid :bigint           not null
 #  max_uses    :integer

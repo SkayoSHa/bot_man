@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2020_03_21_215929) do
   create_table "invites", force: :cascade do |t|
     t.bigint "server_uid", null: false
     t.bigint "inviter_uid", null: false
+    t.bigint "deleter_uid"
     t.string "code", null: false
     t.string "channel_uid", null: false
     t.integer "uses", null: false
