@@ -58,7 +58,11 @@ class InviteContainer < BaseEventContainer
 
     # TODO: Maybe make this a little more error-hardened
     audit_log = server.audit_logs.latest
-    user = audit_log.user
+
+    # Check to see if that log is for the invite delete
+    if audit_log.action == :invite_delete
+      user = audit_log.user
+    end
 
     invite = Invite.find_by(
       server_uid: data[:guild_id],
@@ -72,7 +76,7 @@ class InviteContainer < BaseEventContainer
     # Set the invite to inactive
     invite&.update!(
       active: false,
-      deleter_uid: user.id
+      deleter_uid: user&.id
     )
 
     # :INVITE_DELETE
