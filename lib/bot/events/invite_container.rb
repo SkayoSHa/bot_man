@@ -12,9 +12,20 @@ class InviteContainer < BaseEventContainer
   end
 
   def self.handle_invite_create(event)
-    pp event.type
-    pp event.data
     # Save the new invite that was just created
+    data = event.data.symbolize_keys
+
+    Invite.create!(
+      server_uid: data[:guild_id],
+      inviter_uid: data[:inviter]["id"],
+      code: data[:code],
+      channel_uid: data[:channel_id],
+      uses: data[:uses],
+      max_uses: data[:max_uses],
+      active: true,
+      temporary: data[:temporary],
+      expires: Time.now + data[:max_age].seconds,
+    )
 
     # :INVITE_CREATE
     # {"uses"=>0,
@@ -30,18 +41,6 @@ class InviteContainer < BaseEventContainer
     #  "created_at"=>"2020-03-21T22:50:32.853014+00:00",
     #  "code"=>"HbHFwR",
     #  "channel_id"=>"464322466198716437"}
-
-    # Invite.create!(
-    #   server_uid: ,
-    #   inviter_uid: ,
-    #   code: ,
-    #   channel: ,
-    #   uses: ,
-    #   max_uses: ,
-    #   active: ,
-    #   temporary: ,
-    #   expires: ,
-    # )
   end
 
   def self.handle_invite_delete(event)
