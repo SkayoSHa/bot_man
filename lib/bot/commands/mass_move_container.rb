@@ -26,6 +26,10 @@ class MassMoveContainer < BaseCommandContainer
 
     channels.each do |channel|
       target = channel.name.downcase.tr("^0-9a-z", "")
+
+      # Pick this channel if there's a direct substring
+      return channel if check_substring(source, target)
+
       l = lev(source, target)
 
       if l < dist
@@ -50,5 +54,9 @@ class MassMoveContainer < BaseCommandContainer
 
     memo[[string1, string2]] = min
     min
+  end
+
+  def self.check_substring(source, target)
+    target.include? source
   end
 end
