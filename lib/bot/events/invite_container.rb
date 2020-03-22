@@ -16,6 +16,10 @@ class InviteContainer < BaseEventContainer
     end
   end
 
+  server_create do |event|
+    log_all_invites(event.server)
+  end
+
   def self.handle_invite_create(event)
     # Save the new invite that was just created
     data = event.data.symbolize_keys
@@ -83,5 +87,23 @@ class InviteContainer < BaseEventContainer
     # {"guild_id"=>"351488576325681162",
     #  "code"=>"HbHFwR",
     #  "channel_id"=>"464322466198716437"}
+  end
+
+  def self.log_all_invites(server)
+    invites = server.invites
+
+    invites.each do |invite|
+      Invite.create!(
+        server_uid: invite.server.id,
+        inviter_uid: invite.inviter.id,
+        code: invite.code,
+        channel_uid: invite.channel.id,
+        uses: invite.uses,
+        max_uses: invite.max_uses,
+        active: true,
+        temporary: invite.temporary,
+        expires: Time.now + invite.max_age.seconds
+      )
+    end
   end
 end
