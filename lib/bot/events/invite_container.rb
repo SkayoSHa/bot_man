@@ -119,6 +119,8 @@ class InviteContainer < BaseEventContainer
     current_invite.save!
 
     # Update the join table
+    UserService.ensure_user(user)
+    InviteService.ensure_invite(current_invite)
   end
 
   def self.log_all_invites(server)

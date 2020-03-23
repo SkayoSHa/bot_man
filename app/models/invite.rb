@@ -19,4 +19,6 @@
 #  updated_at  :datetime         not null
 #
 class Invite < ApplicationRecord
+  has_many :invite_users
+  has_many :users, through: :invite_users
 end

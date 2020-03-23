@@ -37,6 +37,9 @@ class User < ApplicationRecord
             uniqueness: true,
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
 
+  has_many :invite_users
+  has_many :invites, through: :invite_users
+
   def self.from_discord_omniauth(auth)
     # Check first for a uid match
     user = where(discord_uid: auth.uid).first

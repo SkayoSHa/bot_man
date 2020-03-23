@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_21_215929) do
+ActiveRecord::Schema.define(version: 2020_03_23_203106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 2020_03_21_215929) do
     t.boolean "bot_account"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "invite_users", force: :cascade do |t|
+    t.bigint "invite_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["invite_id", "user_id"], name: "index_invite_users_on_invite_id_and_user_id", unique: true
+    t.index ["invite_id"], name: "index_invite_users_on_invite_id"
+    t.index ["user_id"], name: "index_invite_users_on_user_id"
   end
 
   create_table "invites", force: :cascade do |t|
