@@ -102,18 +102,22 @@ class InviteContainer < BaseEventContainer
   end
 
   def self.handle_member_join(event)
+    user = UserService.ensure_user(event.user)
     current_invites = Invite.where(server_uid: event.server.id, active: true).to_a
     new_invites = event.server.invites
 
     used_invite = get_used_invite(new_invites, current_invites)
 
-    # TODO: test if one-time user invites still
-    # work/are found with this pattern
+    # TODO
+    # Figure out what to do with one-time invites
+    # currently, it's just kind of ignoring them.
+    # We might be able to figure out what was the
+    # most recently un-activated invite and assume
+    # that they joined from that?
 
-    binding.pry
+    return unless used_invite
 
-    # Update the DB
-    user = UserService.ensure_user(event.user)
+    # Update the invite
     invite = InviteService.ensure_invite(used_invite)
 
     # Update the join table
@@ -147,5 +151,7 @@ class InviteContainer < BaseEventContainer
         end
       end
     end
+
+    nil
   end
 end
