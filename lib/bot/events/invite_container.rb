@@ -5,6 +5,10 @@ class InviteContainer < BaseEventContainer
     log_all_invites(event.server)
   end
 
+  member_join do |event|
+    handle_member_join(event)
+  end
+
   raw do |event|
     if event.type == :INVITE_CREATE
       handle_invite_create(event)
@@ -97,6 +101,23 @@ class InviteContainer < BaseEventContainer
     #  "channel_id"=>"464322466198716437"}
   end
 
+  def self.handle_member_join(event)
+    server = event.server
+    user = event.user
+    current_invites = Invite.where(server_uid: server.id, active: true).to_a
+    new_invites = event.server.invites
+
+    current_invite, new_invite = get_used_invite(new_invites, current_invites)
+
+    # binding.pry
+
+    # Update the DB invite
+    current_invite.uses = new_invite.uses
+    current_invite.save!
+
+    # Update the join table
+  end
+
   def self.log_all_invites(server)
     invites = server.invites
 
@@ -117,6 +138,24 @@ class InviteContainer < BaseEventContainer
       end
 
       new_invite.save!
+    end
+  end
+
+  def self.get_used_invite(new_invites, current_invites)
+    # Loop over the new invites
+    new_invites.each do |new_invite|
+      new_code = new_invite.code.to_s
+
+      # loop over the old invites
+      current_invites.each do |current_invite|
+        # check to see if it's the same code
+        next unless new_code == current_invite.code.to_s
+
+        # if it is, is the uses different?
+        if new_invite.uses != current_invite.uses
+          return [current_invite, new_invite]
+        end
+      end
     end
   end
 end
