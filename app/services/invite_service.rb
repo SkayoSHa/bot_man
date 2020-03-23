@@ -16,7 +16,9 @@ class InviteService
     new_invite.max_uses = incoming_invite.max_uses
     new_invite.active = true
     new_invite.temporary = incoming_invite.temporary
-    new_invite.expires = Time.now + incoming_invite.max_age.seconds
+
+    expires = (incoming_invite.max_age.zero? ? nil : Time.now + incoming_invite.max_age.seconds)
+    new_invite.expires = expires
 
     new_invite.save!
     new_invite

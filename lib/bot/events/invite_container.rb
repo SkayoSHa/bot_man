@@ -36,6 +36,8 @@ class InviteContainer < BaseEventContainer
     # Save the new invite that was just created
     data = event.data.symbolize_keys
 
+    expires = (data[:max_age].zero? ? nil : Time.now + data[:max_age].seconds)
+
     Invite.create!(
       server_uid: data[:guild_id],
       inviter_uid: data[:inviter]["id"],
@@ -45,7 +47,7 @@ class InviteContainer < BaseEventContainer
       max_uses: data[:max_uses],
       active: true,
       temporary: data[:temporary],
-      expires: Time.now + data[:max_age].seconds,
+      expires: expires,
     )
 
     # :INVITE_CREATE
