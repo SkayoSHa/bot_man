@@ -14,7 +14,7 @@ class QuotesContainer < BaseCommandContainer
     return "Please tag someone to quote" unless target_user
 
     # Make sure that the target user is in the DB
-    UserService.update_db_from_user(target_user)
+    UserService.ensure_user(target_user)
 
     # Actually add the quote
     new_quote = Quote.create!(
@@ -61,8 +61,8 @@ class QuotesContainer < BaseCommandContainer
       target_user = event.message.user
 
       # Make sure that the target user is in the DB
-      UserService.update_db_from_user(event.user)
-      UserService.update_db_from_user(target_user)
+      UserService.ensure_user(event.user)
+      UserService.ensure_user(target_user)
 
       is_new = Quote.where(
         server_uid: event.server.id,

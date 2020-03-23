@@ -6,7 +6,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if user
       user.update_discord_data(auth_hash)
-      UserService.update_db_from_user_oauth(auth_hash)
+      UserService.ensure_user_oauth(auth_hash)
 
       redirect_to "#{FRONTEND_URL}?token=#{user.generate_jwt}"
     else
@@ -22,6 +22,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   protected
 
   def auth_hash
-    request.env['omniauth.auth']
+    request.env["omniauth.auth"]
   end
 end

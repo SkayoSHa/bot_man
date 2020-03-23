@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserService
-  def self.update_db_from_user(new_user)
+  def self.ensure_user(new_user)
     # Save/update the user to the database
     discord_user = DiscordUser.where(uid: new_user.id).first_or_create
 
@@ -13,7 +13,7 @@ class UserService
     discord_user.save!
   end
 
-  def self.update_db_from_user_oauth(new_user)
+  def self.ensure_user_oauth(new_user)
     # Save/update the user to the database
     discord_user = DiscordUser.where(uid: new_user.uid).first_or_create
 

@@ -14,7 +14,7 @@ class ContainerWrapper
   end
 
   def self.handle_event(event, _args)
-    UserService.update_db_from_user(event.user)
+    UserService.ensure_user(event.user)
   end
 
   def self.get_server_by_guild_id(guild_id, bot)
