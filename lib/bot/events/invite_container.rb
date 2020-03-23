@@ -109,6 +109,9 @@ class InviteContainer < BaseEventContainer
 
     current_invite, new_invite = get_used_invite(new_invites, current_invites)
 
+    # TODO: test if one-time user invites still
+    # work/are found with this pattern
+
     # binding.pry
 
     # Update the DB invite
@@ -125,17 +128,17 @@ class InviteContainer < BaseEventContainer
       new_invite = Invite.where(
         code: incoming_invite.code,
         server_uid: incoming_invite.server.id
-      ).first_or_create do |invite|
-        invite.server_uid = incoming_invite.server.id
-        invite.inviter_uid = incoming_invite.inviter.id
-        invite.code = incoming_invite.code
-        invite.channel_uid = incoming_invite.channel.id
-        invite.uses = incoming_invite.uses
-        invite.max_uses = incoming_invite.max_uses
-        invite.active = true
-        invite.temporary = incoming_invite.temporary
-        invite.expires = Time.now + incoming_invite.max_age.seconds
-      end
+      ).first_or_create
+
+      new_invite.server_uid = incoming_invite.server.id
+      new_invite.inviter_uid = incoming_invite.inviter.id
+      new_invite.code = incoming_invite.code
+      new_invite.channel_uid = incoming_invite.channel.id
+      new_invite.uses = incoming_invite.uses
+      new_invite.max_uses = incoming_invite.max_uses
+      new_invite.active = true
+      new_invite.temporary = incoming_invite.temporary
+      new_invite.expires = Time.now + incoming_invite.max_age.seconds
 
       new_invite.save!
     end
