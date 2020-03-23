@@ -130,9 +130,19 @@ class InviteContainer < BaseEventContainer
   def self.log_all_invites(server)
     invites = server.invites
 
+    # Make sure we have a record of all current invites
     invites.each do |incoming_invite|
       InviteService.ensure_invite(incoming_invite)
     end
+
+    # Get all of the current codes
+    codes = invites.map(&:code)
+
+    # Mark any no longer there as inactive
+    Invite.
+      where(server_uid: server.id, active: true).
+      where.not(code: codes).
+      update_all(active: false)
   end
 
   def self.get_used_invite(new_invites, current_invites)
