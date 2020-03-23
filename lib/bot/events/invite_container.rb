@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class InviteContainer < BaseEventContainer
+  server_create do |event|
+    log_all_invites(event.server)
+  end
+
   raw do |event|
     if event.type == :INVITE_CREATE
       handle_invite_create(event)
@@ -14,10 +18,14 @@ class InviteContainer < BaseEventContainer
     if event.type == :INVITE_DELETE
       handle_invite_delete(event)
     end
-  end
 
-  server_create do |event|
-    log_all_invites(event.server)
+    if event.type == :READY
+      servers = event.bot.servers.values
+
+      servers.each do |server|
+        log_all_invites(server)
+      end
+    end
   end
 
   def self.handle_invite_create(event)
@@ -92,18 +100,23 @@ class InviteContainer < BaseEventContainer
   def self.log_all_invites(server)
     invites = server.invites
 
-    invites.each do |invite|
-      Invite.create!(
-        server_uid: invite.server.id,
-        inviter_uid: invite.inviter.id,
-        code: invite.code,
-        channel_uid: invite.channel.id,
-        uses: invite.uses,
-        max_uses: invite.max_uses,
-        active: true,
-        temporary: invite.temporary,
-        expires: Time.now + invite.max_age.seconds
-      )
+    invites.each do |incoming_invite|
+      new_invite = Invite.where(
+        code: incoming_invite.code,
+        server_uid: incoming_invite.server.id
+      ).first_or_create do |invite|
+        invite.server_uid = incoming_invite.server.id
+        invite.inviter_uid = incoming_invite.inviter.id
+        invite.code = incoming_invite.code
+        invite.channel_uid = incoming_invite.channel.id
+        invite.uses = incoming_invite.uses
+        invite.max_uses = incoming_invite.max_uses
+        invite.active = true
+        invite.temporary = incoming_invite.temporary
+        invite.expires = Time.now + incoming_invite.max_age.seconds
+      end
+
+      new_invite.save!
     end
   end
 end
