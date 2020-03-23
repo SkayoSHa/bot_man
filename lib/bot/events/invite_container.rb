@@ -110,7 +110,7 @@ class InviteContainer < BaseEventContainer
     # TODO: test if one-time user invites still
     # work/are found with this pattern
 
-    # binding.pry
+    binding.pry
 
     # Update the DB
     user = UserService.ensure_user(event.user)

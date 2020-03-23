@@ -6,7 +6,7 @@ class InviteService
     new_invite = Invite.where(
       code: incoming_invite.code,
       server_uid: incoming_invite.server.id
-    ).first_or_create
+    ).first_or_initialize
 
     new_invite.server_uid = incoming_invite.server.id
     new_invite.inviter_uid = incoming_invite.inviter.id
