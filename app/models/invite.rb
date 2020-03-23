@@ -19,6 +19,6 @@
 #  updated_at  :datetime         not null
 #
 class Invite < ApplicationRecord
-  has_many :invite_users
-  has_many :users, through: :invite_users
+  has_many :invite_discord_users
+  has_many :discord_users, through: :invite_discord_users
 end

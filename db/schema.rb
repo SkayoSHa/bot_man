@@ -24,14 +24,12 @@ ActiveRecord::Schema.define(version: 2020_03_23_203106) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "invite_users", force: :cascade do |t|
+  create_table "invite_discord_users", force: :cascade do |t|
     t.bigint "invite_id"
-    t.bigint "user_id"
+    t.bigint "discord_user_uid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["invite_id", "user_id"], name: "index_invite_users_on_invite_id_and_user_id", unique: true
-    t.index ["invite_id"], name: "index_invite_users_on_invite_id"
-    t.index ["user_id"], name: "index_invite_users_on_user_id"
+    t.index ["invite_id", "discord_user_uid"], name: "index_invite_discord_users_on_invite_id_and_discord_user_uid", unique: true
   end
 
   create_table "invites", force: :cascade do |t|

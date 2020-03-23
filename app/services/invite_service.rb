@@ -19,5 +19,6 @@ class InviteService
     new_invite.expires = Time.now + incoming_invite.max_age.seconds
 
     new_invite.save!
+    new_invite
   end
 end

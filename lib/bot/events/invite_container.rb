@@ -102,25 +102,25 @@ class InviteContainer < BaseEventContainer
   end
 
   def self.handle_member_join(event)
-    server = event.server
-    user = event.user
-    current_invites = Invite.where(server_uid: server.id, active: true).to_a
+    current_invites = Invite.where(server_uid: event.server.id, active: true).to_a
     new_invites = event.server.invites
 
-    current_invite, new_invite = get_used_invite(new_invites, current_invites)
+    used_invite = get_used_invite(new_invites, current_invites)
 
     # TODO: test if one-time user invites still
     # work/are found with this pattern
 
     # binding.pry
 
-    # Update the DB invite
-    current_invite.uses = new_invite.uses
-    current_invite.save!
+    # Update the DB
+    user = UserService.ensure_user(event.user)
+    invite = InviteService.ensure_invite(used_invite)
 
     # Update the join table
-    UserService.ensure_user(user)
-    InviteService.ensure_invite(current_invite)
+    InviteDiscordUser.create!(
+      invite: invite,
+      discord_user: user
+    )
   end
 
   def self.log_all_invites(server)
@@ -143,7 +143,7 @@ class InviteContainer < BaseEventContainer
 
         # if it is, is the uses different?
         if new_invite.uses != current_invite.uses
-          return [current_invite, new_invite]
+          return new_invite
         end
       end
     end

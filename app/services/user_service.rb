@@ -11,6 +11,7 @@ class UserService
     discord_user.bot_account = new_user.bot_account
 
     discord_user.save!
+    discord_user
   end
 
   def self.ensure_user_oauth(new_user)
@@ -23,5 +24,6 @@ class UserService
     discord_user.bot_account = false
 
     discord_user.save!
+    discord_user
   end
 end
