@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2020_03_28_190224) do
   create_table "temporary_voice_channels", force: :cascade do |t|
     t.bigint "server_uid", null: false
     t.bigint "creator_uid", null: false
-    t.string "channel_uid", null: false
+    t.bigint "channel_uid", null: false
     t.boolean "is_jump_channel", null: false
     t.boolean "active", null: false
     t.datetime "created_at", precision: 6, null: false

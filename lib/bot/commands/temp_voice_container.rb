@@ -28,8 +28,15 @@ class TempVoiceContainer < BaseCommandContainer
     )
 
     # Record information to DB
+    TemporaryVoiceChannel.create!(
+      server_uid: event.server.id,
+      creator_uid: event.user.id,
+      channel_uid: new_channel.id,
+      is_jump_channel: true,
+      active: true
+    )
 
-    "Channel \"#{new_quote.id}\" created"
+    "Channel \"#{jump_channel_name}\" created"
   end
 
   def self.random_quote(server_id:, user: nil)

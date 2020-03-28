@@ -6,7 +6,7 @@
 #
 #  id              :bigint           not null, primary key
 #  active          :boolean          not null
-#  channel_uid     :string           not null
+#  channel_uid     :bigint           not null
 #  creator_uid     :bigint           not null
 #  is_jump_channel :boolean          not null
 #  server_uid      :bigint           not null
