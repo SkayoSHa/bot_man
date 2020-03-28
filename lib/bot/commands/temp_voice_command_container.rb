@@ -36,6 +36,6 @@ class TempVoiceCommandContainer < BaseCommandContainer
       active: true
     )
 
-    "Channel \"#{jump_channel_name}\" created"
+    "Temporary jump channel \"#{jump_channel_name}\" created"
   end
 end
