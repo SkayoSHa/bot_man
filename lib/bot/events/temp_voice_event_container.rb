@@ -40,6 +40,10 @@ class TempVoiceEventContainer < BaseEventContainer
     # Move it to be below the jump channel
     new_channel.sort_after(discord_jump_channel, true)
 
+    # Give the user manage_channels for the temp channel
+    allow = Discordrb::Permissions.new [:manage_channels]
+    new_channel.define_overwrite(event.user, allow)
+
     # Record information to DB
     TemporaryVoiceChannel.create!(
       server_uid: server.id,
