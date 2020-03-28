@@ -14,20 +14,21 @@ class TempVoiceEventContainer < BaseEventContainer
 
   def self.handle_channel_join(event)
     server = event.server
+    channel = event.channel
 
     # If it's a jump channel
     jump_channel = TemporaryVoiceChannel.where(
       server_uid: server.id,
-      channel_uid: event.channel.id,
+      channel_uid: channel.id,
       is_jump_channel: true,
       active: true
     ).first
 
-    next unless jump_channel
+    return unless jump_channel
 
     # Find the actual reference to the discord channel
     discord_jump_channel =
-      server.voice_channels.detect { |channel| channel.id == event.channel.id }
+      server.voice_channels.detect { |c| c.id == channel.id }
 
     # Make the new channel
     new_channel = server.create_channel(
@@ -52,5 +53,31 @@ class TempVoiceEventContainer < BaseEventContainer
     server.move(event.user, new_channel)
   end
 
-  def self.handle_channel_leave(event); end
+  def self.handle_channel_leave(event)
+    server = event.server
+    old_channel = event.old_channel
+
+    # If it's a temp channel
+    temp_channel = TemporaryVoiceChannel.where(
+      server_uid: server.id,
+      channel_uid: old_channel.id,
+      is_jump_channel: false,
+      active: true
+    ).first
+
+    return unless temp_channel
+
+    # Find the actual reference to the discord channel
+    discord_temp_channel =
+      server.voice_channels.detect { |c| c.id == old_channel.id }
+
+    # Check to see if anyone else is in the channel
+    return unless discord_temp_channel.users.empty?
+
+    # Mark the channel as inactive
+    temp_channel.update!(active: false)
+
+    # Delete the channel
+    discord_temp_channel.delete
+  end
 end
