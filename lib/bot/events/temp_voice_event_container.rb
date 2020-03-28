@@ -5,8 +5,14 @@ class TempVoiceEventContainer < BaseEventContainer
 
   voice_state_update do |event|
     # Don't do anything if they're leaving the channel
-    next unless event.channel
+    if event.channel
+      handle_channel_join(event)
+    else
+      handle_channel_leave(event)
+    end
+  end
 
+  def self.handle_channel_join(event)
     server = event.server
 
     # If it's a jump channel
@@ -45,4 +51,6 @@ class TempVoiceEventContainer < BaseEventContainer
     # Move the user to the new channel
     server.move(event.user, new_channel)
   end
+
+  def self.handle_channel_leave(event); end
 end
