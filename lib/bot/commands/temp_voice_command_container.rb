@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TempVoiceContainer < BaseCommandContainer
+class TempVoiceCommandContainer < BaseCommandContainer
   extend Discordrb::EventContainer
 
   command(
@@ -20,7 +20,7 @@ class TempVoiceContainer < BaseCommandContainer
 
     server = event.server
 
-    # Make the channel
+    # Make the new channel
     new_channel = server.create_channel(
       jump_channel_name,
       2, # type
@@ -37,15 +37,5 @@ class TempVoiceContainer < BaseCommandContainer
     )
 
     "Channel \"#{jump_channel_name}\" created"
-  end
-
-  def self.random_quote(server_id:, user: nil)
-    quote = Quote.where(server_uid: server_id)
-
-    if user
-      quote = quote.where(quotee_uid: user.id)
-    end
-
-    quote.order("RANDOM()").first
   end
 end
