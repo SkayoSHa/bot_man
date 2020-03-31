@@ -25,8 +25,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_023147) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.bigint "server_uid", null: false
-    t.string "type"
+    t.string "type", null: false
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

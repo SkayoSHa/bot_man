@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: events
@@ -10,5 +8,5 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class Event < ApplicationRecord
+class Events::MessageReactionRemoveAllEvent < Event
 end

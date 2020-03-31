@@ -6,8 +6,7 @@ class EventContainer < BaseEventContainer
 
     # https://discordapp.com/developers/docs/topics/gateway#commands-and-events
     Event.create!(
-      # server_uid: event.server&.id,
-      type: event.type,
+      type: "Events::#{event.type.to_s.downcase.classify}Event",
       data: event.data
     )
   end
