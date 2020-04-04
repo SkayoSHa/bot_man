@@ -11,6 +11,10 @@ class UserUpdateContainer < BaseEventContainer
     end
   end
 
+  member_update do |event|
+    UserService.ensure_user(event.user)
+  end
+
   def self.log_users(server)
     server.users.each do |user|
       UserService.ensure_user(user)
