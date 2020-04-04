@@ -3,7 +3,7 @@
 class QuotesContainer < BaseCommandContainer
   extend Discordrb::EventContainer
 
-  command :addquote, min_args: 2, description: "Records a new quote", usage: 'addquote @<user> [the quote to add]' do |event, target_user_string, *quote|
+  command :addquote, min_args: 2, description: "Records a new quote", usage: "addquote @<user> [the quote to add]" do |event, target_user_string, *quote|
     return "Please tag someone to quote" unless target_user_string
     return "Please add a quote" unless quote
 
@@ -12,9 +12,6 @@ class QuotesContainer < BaseCommandContainer
     target_user_id = target_user_string.delete("^0-9")
     target_user = event.server.member(target_user_id)
     return "Please tag someone to quote" unless target_user
-
-    # Make sure that the target user is in the DB
-    UserService.ensure_user(target_user)
 
     # Actually add the quote
     new_quote = Quote.create!(
@@ -28,7 +25,7 @@ class QuotesContainer < BaseCommandContainer
     "Quote ##{new_quote.id} successfully added"
   end
 
-  command :quote, aliases: [:quotes], min_args: 0, max_args: 1, description: "Replays a quote", usage: 'quote (@<user>|<id>)' do |event, target|
+  command :quote, aliases: [:quotes], min_args: 0, max_args: 1, description: "Replays a quote", usage: "quote (@<user>|<id>)" do |event, target|
     # Return a random one, if target is nil
     quote = random_quote(server_id: event.server.id) if target.nil?
 
@@ -39,9 +36,7 @@ class QuotesContainer < BaseCommandContainer
 
       # There was a user supplied
       if target_user
-        quote =  random_quote(server_id: event.server.id, user: target_user)
-      else
-
+        quote = random_quote(server_id: event.server.id, user: target_user)
       end
 
       quote = Quote.find_by(server_uid: event.server.id, id: key)
@@ -59,10 +54,6 @@ class QuotesContainer < BaseCommandContainer
 
     unless quote.empty?
       target_user = event.message.user
-
-      # Make sure that the target user is in the DB
-      UserService.ensure_user(event.user)
-      UserService.ensure_user(target_user)
 
       is_new = Quote.where(
         server_uid: event.server.id,
@@ -85,7 +76,7 @@ class QuotesContainer < BaseCommandContainer
     end
   end
 
-  command :removequote, min_args: 1, max_args: 1, description: "Removes a quote", usage: 'removequote [the quote ID to remove]' do |event, quote_id|
+  command :removequote, min_args: 1, max_args: 1, description: "Removes a quote", usage: "removequote [the quote ID to remove]" do |event, quote_id|
     return "Please add the quote to remove" unless quote_id
 
     quote = Quote.find_by(server_uid: event.server.id, id: quote_id)
@@ -102,7 +93,7 @@ class QuotesContainer < BaseCommandContainer
     "Quote removed."
   end
 
-  command :allquotes, min_args: 0, max_args: 1, description: "Removes a quote", usage: 'allquotes (@<user>)' do |event, target_user_name|
+  command :allquotes, min_args: 0, max_args: 1, description: "Removes a quote", usage: "allquotes (@<user>)" do |event, target_user_name|
     target_user_id = target_user_name&.delete("^0-9")
     target_user = event.server.member(target_user_id)
 
