@@ -11,6 +11,10 @@ class UserUpdateContainer < BaseEventContainer
     end
   end
 
+  server_create do |event|
+    log_users(event.server)
+  end
+
   member_join do |event|
     UserService.ensure_user(event.user)
   end
