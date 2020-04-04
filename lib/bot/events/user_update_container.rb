@@ -11,6 +11,10 @@ class UserUpdateContainer < BaseEventContainer
     end
   end
 
+  member_join do |event|
+    UserService.ensure_user(event.user)
+  end
+
   member_update do |event|
     UserService.ensure_user(event.user)
   end
