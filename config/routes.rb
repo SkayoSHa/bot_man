@@ -15,5 +15,5 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/", to: redirect_to(ENV["FRONTEND_URL"])
+  get "/", to: redirect(ENV["FRONTEND_URL"])
 end
