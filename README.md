@@ -1,6 +1,6 @@
 # bot_man
 
-[![Build Status](https://travis-ci.org/GreaterGamersLounge/bot_man.svg?branch=master)](https://travis-ci.org/GreaterGamersLounge/bot_man)
+[![Build Status](https://travis-ci.com/GreaterGamersLounge/bot_man.svg?branch=master)](https://travis-ci.com/GreaterGamersLounge/bot_man)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1a8f45d674c4b0661be5/maintainability)](https://codeclimate.com/github/GreaterGamersLounge/bot_man/maintainability)
 
 ---
