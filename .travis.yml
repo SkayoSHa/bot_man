@@ -2,7 +2,7 @@ language: ruby
 dist: xenial
 os: linux
 rvm:
-  - 2.7
+  - 2.7.1
 
 services:
   - postgresql
