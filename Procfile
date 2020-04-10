@@ -1,3 +1,1 @@
-web: echo 'THIS IS A TEST'
-release: bin/rake db:migrate
-bot: bin/rake discord:bot
+web: bundle exec puma -C /opt/elasticbeanstalk/config/private/pumaconf.rb
