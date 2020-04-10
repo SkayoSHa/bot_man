@@ -36,5 +36,13 @@ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 #
 preload_app!
 
+rackup      DefaultRackup
+port        ENV["PORT"]     || 3000
+environment ENV["RACK_ENV"] || "development"
+
+on_worker_boot do
+  ActiveRecord::Base.establish_connection
+end
+
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
