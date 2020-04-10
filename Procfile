@@ -1,3 +1,3 @@
-web: bundle exec rails server -p $PORT
+web: bundle exec puma -C config/puma.rb -d
 release: bin/rake db:migrate
 bot: bin/rake discord:bot
