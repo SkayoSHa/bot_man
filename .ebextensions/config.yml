@@ -4,3 +4,7 @@ packages:
     libsodium-dev: []
   rubygems:
     bundler: '2.1.4'
+
+commands:
+  command1: 
+    command: echo 'TEST 1'
