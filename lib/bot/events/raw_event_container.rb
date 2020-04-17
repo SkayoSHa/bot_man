@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EventContainer < BaseEventContainer
+class RawEventContainer < BaseEventContainer
   raw do |event|
     # https://discordapp.com/developers/docs/topics/gateway#commands-and-events
     Event.create!(
