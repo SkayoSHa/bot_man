@@ -3,8 +3,11 @@
 class RawWorker
   include Sidekiq::Worker
 
-  def perform(type, data)
-    pp "THIS IS A TEST #{type}"
-    pp data
+  def perform(payload)
+    pp payload
+    Event.create!(
+      type: payload["type"],
+      data: payload["data"]
+    )
   end
 end

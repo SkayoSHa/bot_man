@@ -3,9 +3,17 @@
 class RawEventContainer < BaseEventContainer
   raw do |event|
     # https://discordapp.com/developers/docs/topics/gateway#commands-and-events
-    Event.create!(
+
+    payload = {
       type: "Events::#{event.type.to_s.downcase.classify}Event",
       data: event.data
-    )
+    }
+
+    RawWorker.perform_async(payload)
+
+    # Event.create!(
+    #   type: "Events::#{event.type.to_s.downcase.classify}Event",
+    #   data: event.data
+    # )
   end
 end
