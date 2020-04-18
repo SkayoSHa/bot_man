@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
-class EventContainer < BaseEventContainer
+class RawEventContainer < BaseEventContainer
   raw do |event|
     # https://discordapp.com/developers/docs/topics/gateway#commands-and-events
-    Event.create!(
+
+    payload = {
       type: "Events::#{event.type.to_s.downcase.classify}Event",
       data: event.data
-    )
+    }
+
+    RawWorker.perform_async(payload)
   end
 end
