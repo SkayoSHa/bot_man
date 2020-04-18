@@ -10,10 +10,5 @@ class RawEventContainer < BaseEventContainer
     }
 
     RawWorker.perform_async(payload)
-
-    # Event.create!(
-    #   type: "Events::#{event.type.to_s.downcase.classify}Event",
-    #   data: event.data
-    # )
   end
 end
