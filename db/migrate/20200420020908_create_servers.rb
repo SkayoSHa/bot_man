@@ -15,6 +15,7 @@ class CreateServers < ActiveRecord::Migration[6.0]
       t.string :verification_level, null: false
       t.bigint :member_count, null: false
       t.datetime :creation_time, null: false
+      t.boolean :bot_active, null: false
 
       t.timestamps
     end

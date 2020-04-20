@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ServerService
-  def self.ensure_server(new_server)
+  def self.ensure_server(new_server, bot_active = true)
     # Save/update the server to the database
     server = Server.where(uid: new_server.id).first_or_initialize
 
@@ -16,6 +16,7 @@ class ServerService
     server.verification_level = new_server.verification_level
     server.member_count = new_server.member_count
     server.creation_time = new_server.creation_time
+    server.bot_active = bot_active
 
     server.save!
     server

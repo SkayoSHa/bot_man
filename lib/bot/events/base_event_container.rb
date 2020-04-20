@@ -103,6 +103,10 @@ class BaseEventContainer < ContainerWrapper
     super(attributes, &block)
   end
 
+  def self.server_update(attributes = {}, &block)
+    super(attributes, &block)
+  end
+
   def self.raw(attributes = {}, &block)
     super(attributes, &block)
   end

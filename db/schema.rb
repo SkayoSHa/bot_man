@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2020_04_20_020908) do
     t.string "verification_level", null: false
     t.bigint "member_count", null: false
     t.datetime "creation_time", null: false
+    t.boolean "bot_active", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

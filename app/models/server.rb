@@ -7,6 +7,7 @@
 #  id                 :bigint           not null, primary key
 #  afk_channel_uid    :bigint
 #  afk_timeout        :bigint
+#  bot_active         :boolean          not null
 #  creation_time      :datetime         not null
 #  large              :boolean          not null
 #  member_count       :bigint           not null

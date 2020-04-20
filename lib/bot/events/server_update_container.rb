@@ -9,9 +9,23 @@ class ServerUpdateContainer < BaseEventContainer
         ServerService.ensure_server(server)
       end
     end
+
+    if event.type == :GUILD_MEMBER_REMOVE
+      if event.bot.profile.id.to_s == event.data["user"]["id"]
+        server = Server.find_by(uid: event.data["guild_id"])
+
+        server&.update!(
+          bot_active: false
+        )
+      end
+    end
   end
 
   server_create do |event|
+    ServerService.ensure_server(event.server)
+  end
+
+  server_update do |event|
     ServerService.ensure_server(event.server)
   end
 
@@ -19,7 +33,7 @@ class ServerUpdateContainer < BaseEventContainer
     ServerService.ensure_server(event.server)
   end
 
-  member_update do |event|
+  member_leave do |event|
     ServerService.ensure_server(event.server)
   end
 end
