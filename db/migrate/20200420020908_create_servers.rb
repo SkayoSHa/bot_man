@@ -7,7 +7,7 @@ class CreateServers < ActiveRecord::Migration[6.0]
       t.string :name, null: false
       t.string :icon_id, null: false
       t.bigint :owner_uid, null: false
-      t.bigint :region_id, null: false
+      t.string :region_id, null: false
       t.bigint :afk_channel_uid
       t.bigint :system_channel_uid
       t.boolean :large, null: false

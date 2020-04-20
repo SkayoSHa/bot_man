@@ -18,7 +18,7 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  icon_id            :string           not null
-#  region_id          :bigint           not null
+#  region_id          :string           not null
 #
 class Server < ApplicationRecord
 end
