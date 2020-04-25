@@ -10,10 +10,6 @@
 #  updated_at       :datetime         not null
 #  invite_id        :bigint
 #
-# Indexes
-#
-#  index_invite_discord_users_on_invite_id_and_discord_user_uid  (invite_id,discord_user_uid) UNIQUE
-#
 class InviteDiscordUser < ApplicationRecord
   belongs_to :invite
   belongs_to :discord_user, foreign_key: :discord_user_uid
