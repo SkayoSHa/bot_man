@@ -29,13 +29,17 @@ class SetCommandContainer < BaseCommandContainer
 
   def self.set_server_region(event, options)
     available_regions = event.server.available_voice_regions
-    # If no options, display server regions
-    # unless options.empty?
-    #   if options
-        event.server.region = options.first
-    #   end
-    # end
 
-    # binding.pry
+    # If no options, display server regions
+    unless options.empty?
+      new_region = available_regions.detect { |region| region.id == options.first }
+
+      if new_region
+        event.server.region = options.first
+        "Server moved to `#{event.server.region.name}`"
+      else
+        "Invalid server region."
+      end
+    end
   end
 end
