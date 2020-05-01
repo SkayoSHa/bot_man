@@ -31,15 +31,26 @@ class SetCommandContainer < BaseCommandContainer
     available_regions = event.server.available_voice_regions
 
     # If no options, display server regions
-    unless options.empty?
+    if options.any?
       new_region = available_regions.detect { |region| region.id == options.first }
 
       if new_region
+        # If they provided a vaild region
         event.server.region = options.first
         "Server moved to `#{event.server.region.name}`"
       else
+        # If they provided a invaild region
         "Invalid server region."
       end
+    else
+      # If they didn't provide a region
+      <<~STR
+        Current region:
+        `#{event.server.region.id}`
+
+        Available regions:
+        `#{available_regions.map(&:id).join('`, `')}`
+      STR
     end
   end
 end
