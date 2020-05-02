@@ -22,4 +22,7 @@
 #  region_id          :string           not null
 #
 class Server < ApplicationRecord
+  def icon_url
+    Discordrb::API.icon_url(uid, icon_id, "gif")
+  end
 end
