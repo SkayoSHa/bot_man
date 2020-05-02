@@ -26,6 +26,6 @@ class Server < ApplicationRecord
 
   def icon_url
     # TODO: Supoort gifs at some later time
-    Discordrb::API.icon_url(uid, icon_id, "png")
+    Discordrb::API.icon_url(uid, icon_id, "").chomp(".")
   end
 end
