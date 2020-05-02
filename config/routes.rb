@@ -19,6 +19,12 @@ Rails.application.routes.draw do
       omniauth_callbacks: "users/omniauth_callbacks"
     },
                        path_names: { sign_in: :login }
+
+    resources :stats, only: %i(index show) do
+      collection do
+        resources :servers, only: %i(index show)
+      end
+    end
   end
 
   resources :users, only: %i(index show) do

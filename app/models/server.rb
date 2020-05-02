@@ -22,7 +22,10 @@
 #  region_id          :string           not null
 #
 class Server < ApplicationRecord
+  scope :active, -> { where(bot_active: true) }
+
   def icon_url
-    Discordrb::API.icon_url(uid, icon_id, "gif")
+    # TODO: Supoort gifs at some later time
+    Discordrb::API.icon_url(uid, icon_id, "png")
   end
 end
