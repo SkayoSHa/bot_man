@@ -25,7 +25,6 @@ class Server < ApplicationRecord
   scope :active, -> { where(bot_active: true) }
 
   def icon_url
-    # TODO: Supoort gifs at some later time
     Discordrb::API.icon_url(uid, icon_id, "").chomp(".")
   end
 end
