@@ -3,7 +3,7 @@
 class QuotesContainer < BaseCommandContainer
   extend Discordrb::EventContainer
 
-  command :addquote, min_args: 2, description: "Records a new quote", usage: "addquote @<user> [the quote to add]" do |event, target_user_string, *quote|
+  command :addquote, aliases: [:aq], min_args: 2, description: "Records a new quote", usage: "addquote @<user> [the quote to add]" do |event, target_user_string, *quote|
     return "Please tag someone to quote" unless target_user_string
     return "Please add a quote" unless quote
 
