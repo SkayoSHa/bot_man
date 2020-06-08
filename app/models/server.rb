@@ -37,7 +37,8 @@ class Server < ApplicationRecord
         events
       where type = 'Events::MessageCreateEvent'
         and data->>'guild_id' = '#{uid}'
-      group by 1;
+      group by 1
+      order by 1
     SQL
   end
 end
