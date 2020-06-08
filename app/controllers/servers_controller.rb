@@ -9,10 +9,7 @@ class ServersController < ApplicationController
   end
 
   def timeline
-    # return { test: 1234 }
-    pp "YOU ARE HERE"
-    pp @server
-    @servers = Server.active
+    @timeline = @server.timeline
   end
 
   private

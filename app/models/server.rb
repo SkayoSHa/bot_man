@@ -27,4 +27,17 @@ class Server < ApplicationRecord
   def icon_url
     Discordrb::API.icon_url(uid, icon_id, "").chomp(".")
   end
+
+  def timeline
+    ActiveRecord::Base.connection.execute(<<~SQL).to_a
+      select
+        date_trunc('day', created_at)::DATE as day,
+        count(*) as value
+      from
+        events
+      where type = 'Events::MessageCreateEvent'
+        and data->>'guild_id' = '#{uid}'
+      group by 1;
+    SQL
+  end
 end
