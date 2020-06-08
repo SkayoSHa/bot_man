@@ -22,7 +22,9 @@ Rails.application.routes.draw do
 
     resources :stats, only: %i(index show) do
       collection do
-        resources :servers, only: %i(index show)
+        resources :servers, only: %i(index show) do
+          get "/timeline", to: "servers#timeline"
+        end
       end
     end
   end
