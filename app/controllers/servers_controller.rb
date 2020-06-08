@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ServersController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_server, only: [:timeline]
 
   def index
