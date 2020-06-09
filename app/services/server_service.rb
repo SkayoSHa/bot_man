@@ -27,7 +27,7 @@ class ServerService
     server = Server.where(uid: new_server.id).first_or_initialize
 
     server.name = new_server.name
-    server.icon_id = new_server.icon
+    server.icon_id = new_server.icon || ""
     server.owner_uid = new_server.owner_id
     server.region_id = new_server.region
     server.afk_channel_uid = new_server.afk_channel_id
