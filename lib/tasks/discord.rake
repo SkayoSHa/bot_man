@@ -36,6 +36,7 @@ namespace :discord do
 
   desc "Starts the Discord bot"
   task bot: :environment do
+    Server.ensure_servers
     do_bot_run
   end
 

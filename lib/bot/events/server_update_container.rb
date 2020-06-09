@@ -23,17 +23,21 @@ class ServerUpdateContainer < BaseEventContainer
 
   server_create do |event|
     ServerService.ensure_server(event.server)
+    Server.ensure_servers
   end
 
   server_update do |event|
     ServerService.ensure_server(event.server)
+    Server.ensure_servers
   end
 
   member_join do |event|
     ServerService.ensure_server(event.server)
+    Server.ensure_servers
   end
 
   member_leave do |event|
     ServerService.ensure_server(event.server)
+    Server.ensure_servers
   end
 end
