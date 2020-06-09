@@ -41,4 +41,30 @@ class Server < ApplicationRecord
       order by 1
     SQL
   end
+
+  def self.ensure_servers
+    # Find all of the unmade servers
+    servers = ActiveRecord::Base.connection.execute(<<~SQL)
+      select events.data::jsonb
+      from events
+      left join (
+          select distinct(events.data->>'id') as uid, max(id) as id
+        from events
+          where type = 'Events::GuildCreateEvent'
+        group by 1
+      ) sq
+      on events.id = sq.id
+      left join servers
+      on servers.uid::text = events.data->>'id'
+      where type = 'Events::GuildCreateEvent'
+      and servers.id is null
+    SQL
+
+    # Ensure they're made
+    servers.each do |server|
+      parsed_server = JSON.parse(server["data"], object_class: OpenStruct)
+
+      ServerService.ensure_server_from_event_json(parsed_server)
+    end
+  end
 end
