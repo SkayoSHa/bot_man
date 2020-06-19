@@ -13,7 +13,21 @@ class ReactionRoleContainer < BaseCommandContainer
     message = event.channel.load_message(message_id)
     return "Please supply a message_id from this channel" unless message
 
-    # TODO: only allow emoji from this server/generally available
+    # Only allow emoji from this server/generally available
+    is_custom_emoji = (/\p{Emoji}/ =~ emoji).present?
+
+    if is_custom_emoji
+      # Parse out emoji id
+      incoming_id = /.*:(\d*)/.match(emoji)[1]
+
+      # Attempt to find that emoji in this server
+      emojis = event.server.emojis
+      match = emojis.select do |key, _|
+        key == incoming_id
+      end
+
+      return "Please supply a emoji from this server" if match.keys.count.zero?
+    end
 
     # TODO: only allow valid roles
 
