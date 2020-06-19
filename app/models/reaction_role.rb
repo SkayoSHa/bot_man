@@ -1,0 +1,2 @@
+class ReactionRole < ApplicationRecord
+end
