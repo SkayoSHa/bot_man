@@ -48,6 +48,9 @@ class ReactionRoleContainer < BaseCommandContainer
     )
     reaction_role.save!
 
+    # Delete the original triggering message
+    event.message.delete
+
     message = "<@&#{role_id}> sucessfully linked to #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
 
     embed = Discordrb::Webhooks::Embed.new(
