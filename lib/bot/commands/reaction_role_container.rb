@@ -14,7 +14,7 @@ class ReactionRoleContainer < BaseCommandContainer
     return "Please supply a message_id from this channel" unless message
 
     # Only allow emoji from this server/generally available
-    is_custom_emoji = (/\p{Emoji}/ =~ emoji).present?
+    is_custom_emoji = emoji.include? ":"
 
     if is_custom_emoji
       # Parse out emoji id
