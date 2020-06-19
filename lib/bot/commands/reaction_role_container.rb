@@ -13,6 +13,14 @@ class ReactionRoleContainer < BaseCommandContainer
     message = event.channel.load_message(message_id)
     return "Please supply a message_id from this channel" unless message
 
+    # Only allow valid roles
+    roles = event.server.roles
+    match = roles.select do |role|
+      role.id.to_s == role_id
+    end
+
+    return "Please supply a role_id from this server" if match.count.zero?
+
     # Only allow emoji from this server/generally available
     is_custom_emoji = emoji.include? ":"
 
@@ -29,13 +37,15 @@ class ReactionRoleContainer < BaseCommandContainer
       return "Please supply an emoji from this server" if match.count.zero?
     end
 
-    # Only allow valid roles
-    roles = event.server.roles
-    match = roles.select do |role|
-      role.id.to_s == role_id
-    end
+    # Add a reaction to the original message
+    reaction_message = event.channel.load_message(message_id)
 
-    return "Please supply a role_id from this server" if match.count.zero?
+    reaction_key = if is_custom_emoji
+                     /.*:(.*:\d*)/.match(emoji)[1]
+                   else
+                     emoji
+                   end
+    reaction_message.create_reaction(reaction_key)
 
     # Don't allow the same ReactionRole to be added to the same message
     # using #find_or_create_by
