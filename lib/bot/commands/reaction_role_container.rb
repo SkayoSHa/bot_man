@@ -23,10 +23,10 @@ class ReactionRoleContainer < BaseCommandContainer
       # Attempt to find that emoji in this server
       emojis = event.server.emojis
       match = emojis.select do |key, _|
-        key == incoming_id
+        key.to_s == incoming_id
       end
 
-      return "Please supply a emoji from this server" if match.keys.count.zero?
+      return "Please supply an emoji from this server" if match.keys.count.zero?
     end
 
     # TODO: only allow valid roles
