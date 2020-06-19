@@ -26,18 +26,40 @@ class ReactionRoleContainer < BaseCommandContainer
         key.to_s == incoming_id
       end
 
-      return "Please supply an emoji from this server" if match.keys.count.zero?
+      return "Please supply an emoji from this server" if match.count.zero?
     end
 
-    # TODO: only allow valid roles
+    # Only allow valid roles
+    roles = event.server.roles
+    match = roles.select do |role|
+      role.id.to_s == role_id
+    end
+
+    return "Please supply a role_id from this server" if match.count.zero?
+
+    # Don't allow the same ReactionRole to be added to the same message
+    # using #find_or_create_by
 
     # Actually add the new reaction role
-    ReactionRole.create!(
+    reaction_role = ReactionRole.find_or_create_by(
       message_id: message_id,
       reaction: emoji,
       role_id: role_id
     )
+    reaction_role.save!
 
-    return "\"#{role_id}\" sucessfully linked to #{emoji} for \"#{message_id}\""
+    message = "<@&#{role_id}> sucessfully linked to #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+
+    embed = Discordrb::Webhooks::Embed.new(
+      color: "#3FB426",
+      description: message
+    )
+
+    event.bot.send_message(event.channel, "", false, embed)
+    nil
   end
+end
+
+def discord_url(server_id, channel_id, message_id)
+  "https://discordapp.com/channels/#{server_id}/#{channel_id}/#{message_id}"
 end
