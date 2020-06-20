@@ -53,7 +53,7 @@ class ReactionRoleContainer < BaseCommandContainer
     # Actually add the new reaction role
     reaction_role = ReactionRole.find_or_create_by(
       message_id: message_id,
-      reaction: emoji,
+      reaction: parse_emoji_key(emoji),
       role_id: role_id
     )
     reaction_role.save!
@@ -75,12 +75,35 @@ class ReactionRoleContainer < BaseCommandContainer
   reaction_add do |event|
     reaction_role = ReactionRole.where(
       message_id: event.message.id,
-      reaction: event.emoji.to_s
+      reaction: parse_emoji_key(event.emoji.to_s)
     ).first
 
     return unless reaction_role
 
-    event.user.add_role(reaction_role.role_id)
+    event.user.add_role(reaction_role.role_id, "Adding reaction-based role")
+  end
+
+  reaction_remove do |event|
+    reaction_role = ReactionRole.where(
+      message_id: event.message.id,
+      reaction: parse_emoji_key(event.emoji.to_s)
+    ).first
+
+    return unless reaction_role
+
+    event.user.remove_role(reaction_role.role_id, "removing reaction-based role")
+  end
+end
+
+def parse_emoji_key(emoji)
+  return emoji unless emoji.include? ":"
+
+  key = /.*:(.*)>/.match(emoji)[1]
+
+  if key.present?
+    /:(.*)>/.match(emoji)[1]
+  else
+    /<:(.*):>/.match(emoji)[1]
   end
 end
 
