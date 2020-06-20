@@ -71,6 +71,17 @@ class ReactionRoleContainer < BaseCommandContainer
     event.bot.send_message(event.channel, "", false, embed)
     nil
   end
+
+  reaction_add do |event|
+    reaction_role = ReactionRole.where(
+      message_id: event.message.id,
+      reaction: event.emoji.to_s
+    ).first
+
+    return unless reaction_role
+
+    event.user.add_role(reaction_role.role_id)
+  end
 end
 
 def discord_url(server_id, channel_id, message_id)
