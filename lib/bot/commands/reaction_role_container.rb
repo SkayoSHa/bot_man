@@ -78,9 +78,9 @@ class ReactionRoleContainer < BaseCommandContainer
     )
 
     # Don't do anything if they didn't give a valid combination
-    # unless reaction_role
-    #   return "Not a valid message/emoji combination."
-    # end
+    unless reaction_role
+      return "Not a valid message/emoji combination."
+    end
 
     # Delete the original triggering message
     event.message.delete
