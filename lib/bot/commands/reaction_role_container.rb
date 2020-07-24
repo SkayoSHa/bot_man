@@ -72,6 +72,62 @@ class ReactionRoleContainer < BaseCommandContainer
     nil
   end
 
+  command :removereactionrole,
+          aliases: [:rrr],
+          min_args: 2,
+          max_args: 2,
+          description: "Remove a reaction role from a message",
+          usage: "removereactionrole <message_id> :emoji:" do |event, message_id, emoji|
+    # Validate message actually exists
+    message = event.channel.load_message(message_id)
+    return "Please supply a message_id from this channel" unless message
+
+    # Only allow emoji from this server/generally available
+    is_custom_emoji = emoji.include? ":"
+
+    if is_custom_emoji
+      # Parse out emoji id
+      incoming_id = /.*:(\d*)/.match(emoji)[1]
+
+      # Attempt to find that emoji in this server
+      emojis = event.server.emojis
+      match = emojis.select do |key, _|
+        key.to_s == incoming_id
+      end
+
+      return "Please supply an emoji from this server" if match.count.zero?
+    end
+
+    # Find the current reaction role
+    reaction_role = ReactionRole.find_by(
+      message_id: message_id,
+      reaction: parse_emoji_key(emoji)
+    )
+
+    # Don't do anything if they didn't give a valid combination
+    unless reaction_role
+      return "Not a valid message/emoji combination."
+    end
+
+    # Delete the original triggering message
+    event.message.delete
+
+    message = "Sucessfully removed #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+
+    # Actually delete the reaction_role
+    reaction_role&.delete
+
+    # TODO: Remove all of that reaction on the message
+
+    embed = Discordrb::Webhooks::Embed.new(
+      color: "#3FB426",
+      description: message
+    )
+
+    event.bot.send_message(event.channel, "", false, embed)
+    nil
+  end
+
   reaction_add do |event|
     reaction_role = ReactionRole.where(
       message_id: event.message.id,
