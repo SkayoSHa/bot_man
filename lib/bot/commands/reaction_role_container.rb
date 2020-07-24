@@ -105,6 +105,45 @@ class ReactionRoleContainer < BaseCommandContainer
     nil
   end
 
+  command :removeallreactionroles,
+          aliases: [:rarr],
+          min_args: 1,
+          max_args: 1,
+          description: "Remove all reaction roles from a message",
+          usage: "removeallreactionroles <message_id>" do |event, message_id|
+    # Validate message actually exists
+    message = event.channel.load_message(message_id)
+    return "Please supply a message_id from this channel" unless message
+
+    # Find the current reaction role
+    reaction_roles = ReactionRole.where(
+      message_id: message_id
+    )
+
+    return "There are no reaction roles on that message" if reaction_roles.count.zero?
+
+    # Delete the original triggering message
+    event.message.delete
+
+    response = "Sucessfully removed all reaction roles for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+
+    # Remove all of the reactions on the message
+    ReactionService.remove_reactions(
+      message: message
+    )
+
+    # Actually delete the reaction_roles
+    reaction_roles.delete_all
+
+    embed = Discordrb::Webhooks::Embed.new(
+      color: "#3FB426",
+      description: response
+    )
+
+    event.bot.send_message(event.channel, "", false, embed)
+    nil
+  end
+
   reaction_add do |event|
     reaction_role = ReactionRole.where(
       message_id: event.message.id,
