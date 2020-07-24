@@ -21,30 +21,14 @@ class ReactionRoleContainer < BaseCommandContainer
 
     return "Please supply a role_id from this server" if match.count.zero?
 
-    # Only allow emoji from this server/generally available
-    is_custom_emoji = emoji.include? ":"
-
-    if is_custom_emoji
-      # Parse out emoji id
-      incoming_id = /.*:(\d*)/.match(emoji)[1]
-
-      # Attempt to find that emoji in this server
-      emojis = event.server.emojis
-      match = emojis.select do |key, _|
-        key.to_s == incoming_id
-      end
-
-      return "Please supply an emoji from this server" if match.count.zero?
+    unless ReactionService.emoji_in_server(event.server, emoji)
+      return "Please supply an emoji from this server"
     end
 
     # Add a reaction to the original message
     reaction_message = event.channel.load_message(message_id)
 
-    reaction_key = if is_custom_emoji
-                     /.*:(.*:\d*)/.match(emoji)[1]
-                   else
-                     emoji
-                   end
+    reaction_key = ReactionService.reaction_key(emoji)
     reaction_message.create_reaction(reaction_key)
 
     # Don't allow the same ReactionRole to be added to the same message
@@ -53,7 +37,7 @@ class ReactionRoleContainer < BaseCommandContainer
     # Actually add the new reaction role
     reaction_role = ReactionRole.find_or_create_by(
       message_id: message_id,
-      reaction: parse_emoji_key(emoji),
+      reaction: ReactionService.parse_emoji_key(emoji),
       role_id: role_id
     )
     reaction_role.save!
@@ -83,25 +67,14 @@ class ReactionRoleContainer < BaseCommandContainer
     return "Please supply a message_id from this channel" unless message
 
     # Only allow emoji from this server/generally available
-    is_custom_emoji = emoji.include? ":"
-
-    if is_custom_emoji
-      # Parse out emoji id
-      incoming_id = /.*:(\d*)/.match(emoji)[1]
-
-      # Attempt to find that emoji in this server
-      emojis = event.server.emojis
-      match = emojis.select do |key, _|
-        key.to_s == incoming_id
-      end
-
-      return "Please supply an emoji from this server" if match.count.zero?
+    unless ReactionService.emoji_in_server(event.server, emoji)
+      return "Please supply an emoji from this server"
     end
 
     # Find the current reaction role
     reaction_role = ReactionRole.find_by(
       message_id: message_id,
-      reaction: parse_emoji_key(emoji)
+      reaction: ReactionService.parse_emoji_key(emoji)
     )
 
     # Don't do anything if they didn't give a valid combination
@@ -131,7 +104,7 @@ class ReactionRoleContainer < BaseCommandContainer
   reaction_add do |event|
     reaction_role = ReactionRole.where(
       message_id: event.message.id,
-      reaction: parse_emoji_key(event.emoji.to_s)
+      reaction: ReactionService.parse_emoji_key(event.emoji.to_s)
     ).first
 
     return unless reaction_role
@@ -142,24 +115,12 @@ class ReactionRoleContainer < BaseCommandContainer
   reaction_remove do |event|
     reaction_role = ReactionRole.where(
       message_id: event.message.id,
-      reaction: parse_emoji_key(event.emoji.to_s)
+      reaction: ReactionService.parse_emoji_key(event.emoji.to_s)
     ).first
 
     return unless reaction_role
 
     event.user.remove_role(reaction_role.role_id, "removing reaction-based role")
-  end
-end
-
-def parse_emoji_key(emoji)
-  return emoji unless emoji.include? ":"
-
-  key = /.*:(.*)>/.match(emoji)[1]
-
-  if key.present?
-    /:(.*)>/.match(emoji)[1]
-  else
-    /<:(.*):>/.match(emoji)[1]
   end
 end
 
