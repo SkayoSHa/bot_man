@@ -45,11 +45,11 @@ class ReactionRoleContainer < BaseCommandContainer
     # Delete the original triggering message
     event.message.delete
 
-    message = "<@&#{role_id}> sucessfully linked to #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+    response = "<@&#{role_id}> sucessfully linked to #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
 
     embed = Discordrb::Webhooks::Embed.new(
       color: "#3FB426",
-      description: message
+      description: response
     )
 
     event.bot.send_message(event.channel, "", false, embed)
@@ -78,23 +78,27 @@ class ReactionRoleContainer < BaseCommandContainer
     )
 
     # Don't do anything if they didn't give a valid combination
-    unless reaction_role
-      return "Not a valid message/emoji combination."
-    end
+    # unless reaction_role
+    #   return "Not a valid message/emoji combination."
+    # end
 
     # Delete the original triggering message
     event.message.delete
 
-    message = "Sucessfully removed #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+    response = "Sucessfully removed #{emoji} for [this message](#{discord_url(event.server.id, event.channel.id, message_id)})"
+
+    # Remove all of that reaction on the message
+    ReactionService.remove_reactions(
+      message: message,
+      emoji: emoji
+    )
 
     # Actually delete the reaction_role
-    reaction_role&.delete
-
-    # TODO: Remove all of that reaction on the message
+    reaction_role.delete
 
     embed = Discordrb::Webhooks::Embed.new(
       color: "#3FB426",
-      description: message
+      description: response
     )
 
     event.bot.send_message(event.channel, "", false, embed)
