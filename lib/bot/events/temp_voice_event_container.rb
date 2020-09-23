@@ -573,14 +573,14 @@ class TempVoiceEventContainer < BaseEventContainer
       server.voice_channels.detect { |c| c.id == channel.id }
 
     # Get adjective
-    adjective = adjective_list.sample
+    adjective = adjective_list.sample.capitalize
 
     # Get noun
-    noun = noun_list.sample
+    noun = noun_list.sample.capitalize
 
     # Make the new channel
     new_channel = server.create_channel(
-      "#{adjective.capitalize} #{noun.capitalize}"
+      "#{adjective} #{noun}"
       2, # type
       reason: "Creating temporary voice channel"
     )
