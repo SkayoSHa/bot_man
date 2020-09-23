@@ -576,7 +576,7 @@ class TempVoiceEventContainer < BaseEventContainer
     adjective = adjective_list.sample
 
     # Get noun
-    noun = noun_list[rand(noun_list.length)]
+    noun = noun_list.sample
 
     # Make the new channel
     new_channel = server.create_channel(
