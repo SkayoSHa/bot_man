@@ -573,7 +573,7 @@ class TempVoiceEventContainer < BaseEventContainer
       server.voice_channels.detect { |c| c.id == channel.id }
 
     # Get adjective
-    adjective = adjective_list[rand(adjective_list.length)]
+    adjective = adjective_list.sample
 
     # Get noun
     noun = noun_list[rand(noun_list.length)]
@@ -633,4 +633,3 @@ class TempVoiceEventContainer < BaseEventContainer
     discord_temp_channel.delete
   end
 end
-
