@@ -580,7 +580,7 @@ class TempVoiceEventContainer < BaseEventContainer
 
     # Make the new channel
     new_channel = server.create_channel(
-      adjective.capitalize + " " + noun.capitalize,
+      "#{adjective.capitalize} #{noun.capitalize}"
       2, # type
       reason: "Creating temporary voice channel"
     )
