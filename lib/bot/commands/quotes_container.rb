@@ -121,11 +121,9 @@ def random_quote(server_id:, user: nil)
 end
 
 def embed_for(event, quote)
-  quoter = event.server.member(quote.quoter_uid)
-  quoter_name = quoter.nick || "#{quoter.username}##{quoter.discriminator}"
+  quotee_name = get_user_string(event: event, uid: quote.quotee_uid)
 
-  quotee = event.server.member(quote.quotee_uid)
-  quotee_name = quotee.nick || "#{quotee.username}##{quotee.discriminator}"
+  quoter_name = get_user_string(event: event, uid: quote.quoter_uid)
 
   embed = Discordrb::Webhooks::Embed.new(
     color: "#3FB426",
@@ -133,7 +131,39 @@ def embed_for(event, quote)
     timestamp: quote.created_at
   )
 
-  embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: quotee_name, icon_url: quotee.avatar_url)
-  embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Quote ##{quote.id} by: #{quoter_name}", icon_url: quoter.avatar_url)
+  embed.author = Discordrb::Webhooks::EmbedAuthor.new(
+    name: quotee_name,
+    icon_url: get_user_avatar_url(event: event, uid: quote.quotee_uid)
+  )
+
+  embed.footer = Discordrb::Webhooks::EmbedFooter.new(
+    text: "Quote ##{quote.id} by: #{quoter_name}",
+    icon_url: get_user_avatar_url(event: event, uid: quote.quoter_uid)
+  )
+
   embed
+end
+
+def get_user_string(event:, uid:)
+  quote_user = event.server.member(uid)
+
+  return quote_user.nick if quote_user&.nick.present?
+
+  return "#{quote_user.username}##{quote_user.discriminator}" if quote_user&.username.present?
+
+  discord_user = DiscordUser.find_by(uid: uid)
+  return discord_user.name if discord_user&.name.present?
+
+  "👻"
+end
+
+def get_user_avatar_url(event:, uid:)
+  quote_user = event.server.member(uid)
+
+  return quote_user.avatar_url if quote_user&.avatar_url.present?
+
+  discord_user = DiscordUser.find_by(uid: uid)
+  discriminator = discord_user&.discriminator.present? ? discord_user.discriminator.to_i % 5 : rand(0..4)
+
+  "https://cdn.discordapp.com/embed/avatars/#{discriminator}.png"
 end
