@@ -10,5 +10,5 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class Event < ApplicationRecord
+class Events::IntegrationCreateEvent < Event
 end
